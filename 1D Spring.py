@@ -4,7 +4,7 @@ import numpy as np
 # Visual Params
 FILL =      (45, 197, 244)
 BACKGROUND_COLOR = (112, 50, 126)
-(width, height) = (600, 400)
+(width, height) = (1280, 720)
 
 def main():
     y = 200
