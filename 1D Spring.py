@@ -1,3 +1,4 @@
+from typing import get_origin
 import pygame
 import numpy as np
 
@@ -32,8 +33,24 @@ def main():
 
         events = pygame.event.get()
         for event in events:
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                y = move_bob(screen)
+                velocity = 0
+                update_screen(y, screen)
+
             if event.type == pygame.QUIT:
                 running = False
+
+def move_bob(screen):
+    pos = get_pos()
+    y = pos[1]
+    return y
+
+
+def get_pos():
+    pos = pygame.mouse.get_pos()
+    return (pos)
 
 def screen_setup(y, screen):
     """Initialise PyGame screen and draw initial state."""
