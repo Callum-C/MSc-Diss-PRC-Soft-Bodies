@@ -1,3 +1,4 @@
+from turtle import position
 from typing import get_origin
 import pygame
 import numpy as np
@@ -6,10 +7,9 @@ import numpy as np
 FILL =      (45, 197, 244)
 BACKGROUND_COLOR = (112, 50, 126)
 (width, height) = (1280, 720)
-mid = (width/2, height/2)
 def main():
-    bob = np.array((mid[0], 300))    # (x, y)
-    anchor = np.array((mid)) # (x, y)
+    bob = np.array((640.0, 300.0))    # (x, y)
+    anchor = np.array((640.0, 360.0)) # (x, y)
 
     rest_length = 150
     k = 0.01
@@ -36,7 +36,8 @@ def main():
         force = -1 * ((k * x) * v_hat)
 
         velocity += force
-        bob[1] += velocity[1]
+        # print("Velocity: {} Force: {}".format(velocity, force))
+        bob += velocity
 
         velocity = velocity * 0.99
 
@@ -46,21 +47,17 @@ def main():
         for event in events:
 
             if event.type == pygame.MOUSEBUTTONUP:
-                y = move_bob()
-                bob[1] = y
+                pos = get_pos()
+                bob = np.array(pos)
                 velocity = 0
                 update_screen(bob, anchor, screen)
 
             if event.type == pygame.QUIT:
                 running = False
 
-def move_bob():
-    pos = get_pos()
-    y = pos[1]
-    return y
-
 def get_pos():
     pos = pygame.mouse.get_pos()
+    pos = (float(pos[0]), float(pos[1]))
     return (pos)
 
 def screen_setup(bob, anchor, screen):
