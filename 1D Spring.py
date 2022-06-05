@@ -8,8 +8,9 @@ FILL =      (45, 197, 244)
 BACKGROUND_COLOR = (112, 50, 126)
 (width, height) = (1280, 720)
 def main():
-    bob = np.array((640.0, 300.0))    # (x, y)
+    bob = np.array((640.0, 400.0))    # (x, y)
     anchor = np.array((640.0, 360.0)) # (x, y)
+    gravity = np.array((0.0, 0.4))
 
     rest_length = 150
     k = 0.01
@@ -36,7 +37,7 @@ def main():
         force = -1 * ((k * x) * v_hat)
 
         velocity += force
-        # print("Velocity: {} Force: {}".format(velocity, force))
+        velocity += gravity
         bob += velocity
 
         velocity = velocity * 0.99
