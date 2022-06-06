@@ -3,80 +3,65 @@ import numpy as np
 
 from Classes.Particle import Particle
 from Classes.Spring import Spring
+from Classes.Square import Square
 
 # Visual Params
 FILL =      (45, 197, 244)
+PURP =      (230,230,250)
 BACKGROUND_COLOR = (112, 50, 126)
 (width, height) = (1280, 720)
 
 def main():
     clock = pygame.time.Clock()
 
-    particles = []
-    springs = []
-    spacing = 50
-
-    for i in range(10):
-        particles.append(Particle((640, spacing*(i+1)), FILL, gravity=False))
-
-        if i != 0:
-            springs.append(Spring(particles[i-1], particles[i], spacing, 0.01, FILL))
-    
-    particles[0].locked = True
-
+    bob = Square((200, 100), 5, 50, FILL)
 
     screen = pygame.display.set_mode((width, height))
-    screen_setup(particles, springs, screen)
+    screen_setup(bob, screen)
+
+    pygame.display.update()
 
     running = True
+    count = 0
     while running:
         clock.tick(60)
 
-        # Update Springs
-        for spring in springs:
-            spring.update()
+        if count > 120:
+            bob.update()
 
-        # Update particles
-        for particle in particles:
-            particle.update_pos()
+        update_screen(bob, screen)
 
-        update_screen(particles, springs, screen)
-        
         events = pygame.event.get()
         for event in events:
 
             if event.type == pygame.MOUSEBUTTONUP:
-                pos = get_pos()
-                particles[len(particles)-1].set_pos(pos)
-                update_screen(particles, springs, screen)
+                NotImplemented
 
             if event.type == pygame.QUIT:
                 running = False
+        count += 1
 
 def get_pos():
     pos = pygame.mouse.get_pos()
     pos = (float(pos[0]), float(pos[1]))
     return (pos)
 
-def screen_setup(particles, springs, screen):
+def screen_setup(bob, screen):
     """Initialise pygame screen and draw initial state."""
 
     pygame.init()
     pygame.display.set_caption("Spring Damper")
 
-    update_screen(particles, springs, screen) 
+    update_screen(bob, screen) 
 
-def update_screen(particles, springs, screen):
+def update_screen(bob, screen):
     """Update screen, called every frame."""
 
     screen.fill(BACKGROUND_COLOR)
 
-    for particle in particles:
-        particle.draw(screen)
-        
+    bob.draw(screen)
 
-    for spring in springs:
-        spring.draw(screen)
+    pygame.draw.rect(screen, PURP, pygame.Rect(200, 100, 400, 400), 2)
 
     pygame.display.update()
 
