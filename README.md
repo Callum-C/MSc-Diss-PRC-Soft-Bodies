@@ -8,7 +8,3 @@ Initial spring implementation operating only on the Y axis.
 2D Spring Implementation with some simple Gravity.
 
 ![2DSpringGravityGif](https://user-images.githubusercontent.com/60474698/172057802-787e26fa-705d-4cd3-9d14-410c531acba7.gif)
-
-Spring and Particle behaviour split into separate classes allowing for expansion. Gravity removed and varying sizes of particles depicting particle mass.
-
-![Classes Gif](https://user-images.githubusercontent.com/60474698/172174139-9005d4de-d254-43a4-bf91-60e5709a4963.gif)
