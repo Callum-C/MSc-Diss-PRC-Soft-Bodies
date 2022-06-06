@@ -1,14 +1,10 @@
 # Spring-Damper
 Testing Spring Dampers in Python.
 
-Initial spring implementation operating only on the Y axis.
+Square Implementation with particles losing 1% of velocity every frame / iteration.
 
-![1d Spring Gif](https://user-images.githubusercontent.com/60474698/172019510-8bd3294e-d22e-4686-89ae-364b7dd9227e.gif)
+![Square gif](https://user-images.githubusercontent.com/60474698/172199022-434b1dc7-ad2d-4cc8-a107-193531ee5eef.gif)
 
-2D Spring Implementation with some simple Gravity.
+Square behaviour when particles maintain velocity.
 
-![2DSpringGravityGif](https://user-images.githubusercontent.com/60474698/172057802-787e26fa-705d-4cd3-9d14-410c531acba7.gif)
-
-Spring and Particle behaviour split into separate classes allowing for expansion. Gravity removed and varying sizes of particles depicting particle mass.
-
-![Classes Gif](https://user-images.githubusercontent.com/60474698/172174139-9005d4de-d254-43a4-bf91-60e5709a4963.gif)
+![InfiniteSquareGif](https://user-images.githubusercontent.com/60474698/172199059-3622318e-ffce-4b36-a035-09a6e262402f.gif)
