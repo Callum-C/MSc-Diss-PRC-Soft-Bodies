@@ -1,5 +1,3 @@
-from turtle import position
-from typing import get_origin
 import pygame
 import numpy as np
 
@@ -14,7 +12,7 @@ def main():
 
     rest_length = 150
     k = 0.01
-    velocity = 0
+    velocity = np.array((0.0, 0.0))
     force = 0
 
     clock = pygame.time.Clock()
