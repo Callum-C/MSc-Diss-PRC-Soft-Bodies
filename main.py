@@ -1,8 +1,8 @@
 import pygame
 import numpy as np
 
-from Particle import Particle
-from Spring import Spring
+from Classes.Particle import Particle
+from Classes.Spring import Spring
 
 # Visual Params
 FILL =      (45, 197, 244)
