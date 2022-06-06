@@ -4,7 +4,7 @@ import pygame
 class Particle:
     """Defines a particle within an object, connected by springs."""
 
-    def __init__(self, pos, fill, mass=1, lock=False):
+    def __init__(self, pos, fill, mass=1, lock=False, gravity=False):
         """Initalize particle object.
         
         Params
@@ -17,14 +17,28 @@ class Particle:
 
         lock: boolean
         Lock particle in place, unaffected by physics.
+
+        gravity: boolean
+        Is particle affected by gravity? 
+        Gravity hard coded to 0.1
         """
+        gravity_strength = 0.1
 
         self.pos = np.array((float(pos[0]), float(pos[1])))
         
-        self.locked = lock
         self.fill = fill
-
         self.mass = mass
+
+        # Is particle locked in place?
+        self.locked = lock  
+
+        # Is particle affected by gravity?
+        if gravity:
+            self.gravity = np.array((0.0, gravity_strength*mass))
+        else:
+            self.gravity = np.array((0.0, 0.0))
+
+        
         self.acceleration = np.array((0.0, 0.0))
         self.velocity = np.array((0.0, 0.0))
 
@@ -47,6 +61,7 @@ class Particle:
 
         if not self.locked:
             self.velocity += self.acceleration
+            self.velocity += self.gravity
             self.pos += self.velocity
 
             self.acceleration = self.acceleration * 0
