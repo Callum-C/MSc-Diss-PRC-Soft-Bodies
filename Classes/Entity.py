@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Entity:
     """An entity is an object within the simulation made up of many Particles and Springs"""
 
@@ -13,7 +14,7 @@ class Entity:
 
     def update(self):
         """
-        Update all springs and particles in the entity.
+        Update all springs in the entity.
         
         Called every frame / iteration.
         """
@@ -21,21 +22,12 @@ class Entity:
         for spring in self.springs:
             spring.update()
 
-        for row in self.particles:
-            for particle in row:
-                particle.update_pos()
-
     def draw(self, screen):
         """
         Draw entity to screen.
 
         Called every frame / iteration.
         """
-
-        for row in self.particles:
-            for particle in row:
-                particle.draw(screen)
-        
 
         for spring in self.springs:
             spring.draw(screen)
