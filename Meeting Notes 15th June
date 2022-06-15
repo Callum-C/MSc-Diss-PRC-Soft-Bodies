@@ -1,0 +1,17 @@
+Implement Damper
+- Current simulation has particle velocity losing 1% every frame, improve this with a simulated damper
+
+Reservoir Controlled Agent
+- Springs should act like muscles
+- Output from controller should change spring force, either expand or contract
+- Some way of locking particles in place - start simple, lock them but expand in future
+- Particles could be lifted off the ground, acted upon by friction, or simply locked in place
+- Particles could have a friction value, could be adapted by evolution, different models having particles with different friction
+
+Resits
+- Think about work to complete for IAM and Adaptive Systems
+- IAM - Spring Damper Spider Web
+- Adaptive Systems - Reservoir controlled robot - Echo State Networks
+- Get started sooner rather than later, leaving more time later for bigger project
+- Overlapping project with resits will allow further work in both, growing understanding of problem domain
+
