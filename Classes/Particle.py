@@ -1,6 +1,7 @@
 import numpy as np
 import pygame
 
+
 class Particle:
     """Defines a particle within an object, connected by springs."""
 
@@ -25,20 +26,19 @@ class Particle:
         gravity_strength = 0.1
 
         self.pos = np.array((float(pos[0]), float(pos[1])))
-        
+
         self.fill = fill
         self.mass = mass
 
         # Is particle locked in place?
-        self.locked = lock  
+        self.locked = lock
 
         # Is particle affected by gravity?
         if gravity:
-            self.gravity = np.array((0.0, gravity_strength*mass))
+            self.gravity = np.array((0.0, gravity_strength * mass))
         else:
             self.gravity = np.array((0.0, 0.0))
 
-        
         self.acceleration = np.array((0.0, 0.0))
         self.velocity = np.array((0.0, 0.0))
 
@@ -77,7 +77,7 @@ class Particle:
         Display to draw Particle to.
         """
 
-        size = self.mass * 16
+        size = self.mass * 8
         pygame.draw.circle(screen, self.fill, self.pos, size)
 
     """--- Getters and Setters ---"""
@@ -92,5 +92,3 @@ class Particle:
         """Returns particle position."""
 
         return self.pos
-
-    

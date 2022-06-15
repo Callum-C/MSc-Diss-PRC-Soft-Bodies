@@ -1,8 +1,8 @@
+import numpy as np
+
 from Classes.Entity import Entity
 from Classes.Particle import Particle
 from Classes.Spring import Spring
-
-import numpy as np
 
 
 class Circle(Entity):
@@ -26,6 +26,7 @@ class Circle(Entity):
         spacing: int
         Space between particles when at rest.
         """
+        NotImplemented
 
     def update(self):
         """
