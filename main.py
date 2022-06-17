@@ -1,21 +1,21 @@
 import pygame
 import numpy as np
 
+from colours import FILL, SILVER, BACKGROUND_COLOUR
+
 from Classes.Particle import Particle
 from Classes.Spring import Spring
 from Classes.Square import Square
 
 # Visual Params
-FILL = (45, 197, 244)
-PURP = (230, 230, 250)
-BACKGROUND_COLOR = (112, 50, 126)
+
 (width, height) = (1280, 720)
 
 
 def main():
     clock = pygame.time.Clock()
 
-    bob = Square((200, 100), 5, 50, FILL)
+    bob = Square((200, 100), 5, 100, SILVER)
 
     screen = pygame.display.set_mode((width, height))
     screen_setup(bob, screen)
@@ -23,12 +23,12 @@ def main():
     pygame.display.update()
 
     running = True
-    # count = 0
+    count = 0
     while running:
-        clock.tick(60)
+        clock.tick(30)
 
-        # if count > 120:
-        bob.update()
+        if count > 120:
+            bob.update()
 
         update_screen(bob, screen)
 
@@ -39,8 +39,11 @@ def main():
                 NotImplemented
 
             if event.type == pygame.QUIT:
+                max_force = bob.get_max_force()
+                min_force = bob.get_min_force()
+                print("Min Force: {} Max Force: {}".format(min_force, max_force))
                 running = False
-        # count += 1
+        count += 1
 
 
 def get_pos():
@@ -61,11 +64,11 @@ def screen_setup(bob, screen):
 def update_screen(bob, screen):
     """Update screen, called every frame."""
 
-    screen.fill(BACKGROUND_COLOR)
+    screen.fill(BACKGROUND_COLOUR)
 
     bob.draw(screen)
 
-    pygame.draw.rect(screen, PURP, pygame.Rect(200, 100, 400, 400), 2)
+    # pygame.draw.rect(screen, SILVER, pygame.Rect(200, 100, 400, 400), 2)
 
     pygame.display.update()
 

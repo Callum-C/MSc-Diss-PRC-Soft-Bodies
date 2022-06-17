@@ -36,10 +36,10 @@ class Square(Entity):
                 row_particles.append(Particle(ppos, fill))
 
                 if j != 0:
-                    springs.append(Spring(row_particles[j - 1], row_particles[j], spacing, 0.01, fill))
+                    springs.append(Spring(row_particles[j - 1], row_particles[j], spacing/2, 0.01, fill))
 
                 if i != 0:
-                    springs.append(Spring(particles[i - 1][j], row_particles[j], spacing, 0.01, fill))
+                    springs.append(Spring(particles[i - 1][j], row_particles[j], spacing/2, 0.01, fill))
 
             particles.append(row_particles)
 
@@ -66,8 +66,11 @@ class Square(Entity):
         Called every frame / iteration.
         """
 
+        super(Square, self).draw(screen)
+
         for row in self.particles:
             for particle in row:
                 particle.draw(screen)
 
-        super(Square, self).draw(screen)
+        
+

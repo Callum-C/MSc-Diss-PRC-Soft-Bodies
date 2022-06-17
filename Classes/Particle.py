@@ -1,7 +1,6 @@
 import numpy as np
 import pygame
 
-
 class Particle:
     """Defines a particle within an object, connected by springs."""
 
