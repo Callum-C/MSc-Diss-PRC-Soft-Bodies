@@ -12,3 +12,6 @@ Square behaviour when particles maintain velocity.
 Spring display colour changing based on force being exerted.
 
 ![SpringColourGif](https://user-images.githubusercontent.com/60474698/174321000-01d4b052-0f73-4b16-ac9b-1fd65e704593.gif)
+
+
+![SpringColour2Gif](https://user-images.githubusercontent.com/60474698/174324994-8c18d11a-402b-433c-87a0-ad3003d47ed1.gif)
