@@ -1,84 +1,106 @@
 import pygame
 import numpy as np
 
+from colours import FILL, SILVER, BACKGROUND_COLOUR
+
 from Classes.Particle import Particle
 from Classes.Spring import Spring
+from Classes.Square import Square
+from Classes.C_Elegen import C_Elegen
 
 # Visual Params
-FILL =      (45, 197, 244)
-BACKGROUND_COLOR = (112, 50, 126)
+
 (width, height) = (1280, 720)
+entities = []
 
 def main():
     clock = pygame.time.Clock()
 
-    particles = []
-    springs = []
-    spacing = 50
-
-    for i in range(10):
-        particles.append(Particle((640, spacing*(i+1)), FILL, gravity=False))
-
-        if i != 0:
-            springs.append(Spring(particles[i-1], particles[i], spacing, 0.01, FILL))
-    
-    particles[0].locked = True
+    elegen = C_Elegen((200, 100), 7, 100)
+    entities.append(elegen)
 
 
     screen = pygame.display.set_mode((width, height))
-    screen_setup(particles, springs, screen)
+    screen_setup(entities, screen)
+
+    pygame.display.update()
 
     running = True
+    count = 0
     while running:
-        clock.tick(60)
+        clock.tick(30)
 
-        # Update Springs
-        for spring in springs:
-            spring.update()
+        if count > 120:
+            for e in entities:
+                e.update()
 
-        # Update particles
-        for particle in particles:
-            particle.update_pos()
+        update_screen(entities, screen)
 
-        update_screen(particles, springs, screen)
-        
         events = pygame.event.get()
         for event in events:
 
             if event.type == pygame.MOUSEBUTTONUP:
+                elegen.unlock_head()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = get_pos()
-                particles[len(particles)-1].set_pos(pos)
-                update_screen(particles, springs, screen)
+                elegen.move_to_cursor(pos)
+                elegen.lock_head()
 
             if event.type == pygame.QUIT:
                 running = False
+        count += 1
+
 
 def get_pos():
     pos = pygame.mouse.get_pos()
     pos = (float(pos[0]), float(pos[1]))
     return (pos)
 
-def screen_setup(particles, springs, screen):
-    """Initialise pygame screen and draw initial state."""
+
+def screen_setup(entities, screen):
+    """
+    Initialise pygame screen and draw initial state.
+    
+    Params
+    ------
+
+    entities: list
+    List of entity objects.
+
+    screen: Pygame Screen
+    Screent to draw assets to.
+    """
 
     pygame.init()
     pygame.display.set_caption("Spring Damper")
 
-    update_screen(particles, springs, screen) 
+    update_screen(entities, screen)
 
-def update_screen(particles, springs, screen):
-    """Update screen, called every frame."""
 
-    screen.fill(BACKGROUND_COLOR)
+def update_screen(entities, screen):
+    """
+    Update screen, called every frame.
+    
+    Params
+    ------
 
-    for particle in particles:
-        particle.draw(screen)
-        
+    entities: list
+    List of entity objects.
 
-    for spring in springs:
-        spring.draw(screen)
+    screen: Pygame Screen
+    Screen to draw assets to.
+    """
+
+    screen.fill(BACKGROUND_COLOUR)
+
+    for e in entities:
+        e.draw(screen)
+
+    # pygame.draw.rect(screen, SILVER, pygame.Rect(200, 100, 400, 400), 2)
 
     pygame.display.update()
+
 
 if __name__ == '__main__':
     main()
