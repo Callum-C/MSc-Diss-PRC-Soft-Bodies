@@ -8,3 +8,8 @@ Square Implementation with particles losing 1% of velocity every frame / iterati
 Square behaviour when particles maintain velocity.
 
 ![InfiniteSquareGif](https://user-images.githubusercontent.com/60474698/172199059-3622318e-ffce-4b36-a035-09a6e262402f.gif)
+
+Spring colour changing based on force being exerted.
+- Simulation slowed down to 30 frames per second (FPS) and Springs drawn thicker to better show colour change.
+
+![SpringColour2Gif](https://user-images.githubusercontent.com/60474698/174324994-8c18d11a-402b-433c-87a0-ad3003d47ed1.gif)
