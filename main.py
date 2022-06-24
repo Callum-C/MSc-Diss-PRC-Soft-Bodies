@@ -6,19 +6,22 @@ from colours import FILL, SILVER, BACKGROUND_COLOUR
 from Classes.Particle import Particle
 from Classes.Spring import Spring
 from Classes.Square import Square
+from Classes.C_Elegen import C_Elegen
 
 # Visual Params
 
 (width, height) = (1280, 720)
-
+entities = []
 
 def main():
     clock = pygame.time.Clock()
 
-    bob = Square((200, 100), 5, 100, SILVER)
+    elegen = C_Elegen((200, 100), 7, 100)
+    entities.append(elegen)
+
 
     screen = pygame.display.set_mode((width, height))
-    screen_setup(bob, screen)
+    screen_setup(entities, screen)
 
     pygame.display.update()
 
@@ -28,20 +31,23 @@ def main():
         clock.tick(30)
 
         if count > 120:
-            bob.update()
+            for e in entities:
+                e.update()
 
-        update_screen(bob, screen)
+        update_screen(entities, screen)
 
         events = pygame.event.get()
         for event in events:
 
             if event.type == pygame.MOUSEBUTTONUP:
-                NotImplemented
+                elegen.unlock_head()
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = get_pos()
+                elegen.move_to_cursor(pos)
+                elegen.lock_head()
 
             if event.type == pygame.QUIT:
-                max_force = bob.get_max_force()
-                min_force = bob.get_min_force()
-                print("Min Force: {} Max Force: {}".format(min_force, max_force))
                 running = False
         count += 1
 
@@ -52,21 +58,44 @@ def get_pos():
     return (pos)
 
 
-def screen_setup(bob, screen):
-    """Initialise pygame screen and draw initial state."""
+def screen_setup(entities, screen):
+    """
+    Initialise pygame screen and draw initial state.
+    
+    Params
+    ------
+
+    entities: list
+    List of entity objects.
+
+    screen: Pygame Screen
+    Screent to draw assets to.
+    """
 
     pygame.init()
     pygame.display.set_caption("Spring Damper")
 
-    update_screen(bob, screen)
+    update_screen(entities, screen)
 
 
-def update_screen(bob, screen):
-    """Update screen, called every frame."""
+def update_screen(entities, screen):
+    """
+    Update screen, called every frame.
+    
+    Params
+    ------
+
+    entities: list
+    List of entity objects.
+
+    screen: Pygame Screen
+    Screen to draw assets to.
+    """
 
     screen.fill(BACKGROUND_COLOUR)
 
-    bob.draw(screen)
+    for e in entities:
+        e.draw(screen)
 
     # pygame.draw.rect(screen, SILVER, pygame.Rect(200, 100, 400, 400), 2)
 
