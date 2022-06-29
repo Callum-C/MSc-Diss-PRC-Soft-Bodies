@@ -1,0 +1,8 @@
+Spider web for IAM resit
+
+Look into Echo State Network Robots for Adaptive Systems
+
+Make plan for project progression, aim to have draft completed 2 weeks before deadline
+Day to day plan of what to spend time on
+
+Pymunk engine of spider web, use for inspiration but use own spring system
