@@ -2,11 +2,11 @@ import numpy as np
 import pygame
 import math
 
-from colours import B_R_GRADIENT, GRADIENT_KEYS
+from colours import B_R_GRADIENT, GRADIENT_KEYS, SILVER
 
 class Spring:
     """Defines a spring within an object, connects two particles."""
-    def __init__(self, A, B, rest_length, k, fill):
+    def __init__(self, A, B, rest_length, k, fill=SILVER):
         """
         Create Spring object that connects two Particles.
         

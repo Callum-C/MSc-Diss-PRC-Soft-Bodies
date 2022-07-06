@@ -1,5 +1,3 @@
-from turtle import update
-from matplotlib.pyplot import fill
 from Classes.Entity import Entity
 from Classes.Particle import Particle
 from Classes.Spring import Spring
@@ -38,7 +36,7 @@ class C_Elegen(Entity):
             particles.append(Particle(ppos, SILVER))
 
             if i != 0:
-                springs.append(Spring(particles[i-1], particles[i], spacing, 0.01, fill))
+                springs.append(Spring(particles[i-1], particles[i], spacing, 0.01, FILL))
 
         self.particles = particles
         self.head = particles[0]

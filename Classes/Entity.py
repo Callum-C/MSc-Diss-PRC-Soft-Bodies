@@ -32,6 +32,10 @@ class Entity:
         for spring in self.springs:
             spring.draw(screen)
 
+    """ --- Getters and Setters -- """
+    def set_pos(self, pos):
+        self.pos = (float(pos[0]), float(pos[1]))
+
     def get_max_force(self):
         """Searches all entity spring's and returns the max force exerted."""
 

@@ -42,7 +42,8 @@ class Particle:
         self.velocity = np.array((0.0, 0.0))
 
     def apply_force(self, force):
-        """Apply force from spring to particle.
+        """
+        Apply force from spring to particle.
         
         Params
         ------
@@ -56,7 +57,7 @@ class Particle:
         self.acceleration += acc
 
     def update_pos(self):
-        """Update particle position via force enacted upon it."""
+        """ Update particle position via force enacted upon it. """
 
         if not self.locked:
             self.velocity += self.acceleration
