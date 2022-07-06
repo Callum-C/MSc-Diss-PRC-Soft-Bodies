@@ -32,6 +32,38 @@ class Entity:
         for spring in self.springs:
             spring.draw(screen)
 
+    def add_force(self, changes):
+        """
+        Add Force to springs.
+        
+        Params
+        ------
+        changes: list
+        changes[0] affects self.springs[0]
+        """
+
+        for i, change in enumerate(changes):
+            self.springs[i].add_force(change)
+
+    # --- Getters and Setters --- #
+
+    def get_spring_lengths(self):
+        """Retrieve Length of All Springs."""
+
+        lengths = []
+        for spring in self.springs:
+            lengths.append(spring.get_length())
+
+        return lengths
+
+    def get_spring_forces(self):
+
+        forces = []
+        for spring in self.springs:
+            forces.append(spring.get_force())
+
+        return forces
+
     def get_max_force(self):
         """Searches all entity spring's and returns the max force exerted."""
 

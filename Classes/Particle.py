@@ -1,6 +1,8 @@
 import numpy as np
 import pygame
 
+from colours import RED
+
 class Particle:
     """Defines a particle within an object, connected by springs."""
 
@@ -77,7 +79,11 @@ class Particle:
         """
 
         size = self.mass * 8
-        pygame.draw.circle(screen, self.fill, self.pos, size)
+
+        if self.locked:
+            pygame.draw.circle(screen, RED, self.pos, size, 2)
+        else:
+            pygame.draw.circle(screen, self.fill, self.pos, size, 2)
 
     """--- Getters and Setters ---"""
 
