@@ -1,0 +1,27 @@
+All resits are capped, aim for mid 60s, just pass
+
+Intelligence in Animals and Machines
+------------------------------------
+
+Stick with the Spider Web, create vibrations on the web and have it turn toward the source
+
+
+Adaptive Systems
+----------------
+
+Could use Reservoirpy
+mainly look at the 2 homeostat projects and do both
+
+
+Project
+-------
+
+The worm / mass spring damper is the reservoir
+
+The extensions of the springs are the reservoir
+Multiply the extensions of the springs, by some weight matrix and use the output to modify the rest length of the spring
+
+Initialize a random weight matrix, this is what is being evolved by the GA
+
+Start simple, 4 nodes fully connected, group 2, lock each group interchangably
+- Ideally build toward a friction system
