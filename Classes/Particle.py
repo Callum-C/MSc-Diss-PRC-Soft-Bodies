@@ -7,7 +7,7 @@ class Particle:
     """Defines a particle within an object, connected by springs."""
 
     def __init__(self, pos, fill, mass=1, lock=False, gravity=False):
-        """Initalize particle object.
+        """Initialize particle object.
         
         Params
         ------
@@ -15,7 +15,7 @@ class Particle:
         (x, y) position
 
         fill: tuple
-        (r, g, b) colour value for pygame.draw
+        (r, g, b) colour value for pygame draw
 
         lock: boolean
         Lock particle in place, unaffected by physics.
@@ -57,16 +57,23 @@ class Particle:
         acc = ff / self.mass
         self.acceleration += acc
 
-    def update_pos(self):
-        """Update particle position via force enacted upon it."""
+    def update_pos(self, dt):
+        """
+        Update particle position via force enacted upon it.
+
+        Params
+        ------
+
+        dt: float
+        delta t, change in t
+        """
 
         if not self.locked:
-            self.velocity += self.acceleration
-            self.velocity += self.gravity
+            self.velocity += (self.acceleration * dt)
+            self.velocity = self.velocity * 0.98
             self.pos += self.velocity
 
             self.acceleration = self.acceleration * 0
-            self.velocity = self.velocity * 0.99
 
     def draw(self, screen):
         """
@@ -88,7 +95,7 @@ class Particle:
     """--- Getters and Setters ---"""
 
     def set_pos(self, pos):
-        """Manually update particle's positon."""
+        """Manually update particle's position."""
 
         self.pos = (float(pos[0]), float(pos[1]))
         self.velocity = 0

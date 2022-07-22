@@ -7,7 +7,8 @@ from colours import SILVER, FILL
 
 import numpy as np
 
-class C_Elegen(Entity):
+
+class CElegen(Entity):
     """ Creates a C Elegen Object. """
 
     def __init__(self, pos, size, spacing):
@@ -27,14 +28,14 @@ class C_Elegen(Entity):
         Space between particles when at rest.
         """
 
-        super(C_Elegen, self).__init__(pos)
+        super(CElegen, self).__init__(pos)
                 
         self.particles = self.init_particles(size, spacing)
         self.springs = self.init_springs(spacing)
     
     def init_particles(self, size, spacing):
-        """"
-        Intialise Elegen Particles.
+        """
+        Initialize Elegen Particles.
         Called During Entity __init__.
         """
         particles = []
@@ -58,7 +59,7 @@ class C_Elegen(Entity):
 
     def init_springs(self, spacing):
         """
-        Initialise Elegen Springs
+        Initialize Elegen Springs
         Called During __init__.
         """
         springs = []
@@ -100,7 +101,7 @@ class C_Elegen(Entity):
         Called every frame / iteration.
         """
 
-        super(C_Elegen, self).update()
+        super(CElegen, self).update()
 
         for group in self.particles:
             for particle in group:
@@ -114,7 +115,7 @@ class C_Elegen(Entity):
         Called every frame / iteration.
         """
 
-        super(C_Elegen, self).draw(screen)
+        super(CElegen, self).draw(screen)
 
         for group in self.particles:
             for particle in group:
