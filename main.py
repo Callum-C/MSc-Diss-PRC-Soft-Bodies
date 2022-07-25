@@ -10,6 +10,7 @@ from classes.square import Square
 from classes.c_elegen import CElegen
 from classes.test_ent import Test
 from classes.fc_square import FCSquare
+from classes.reservoir import Reservoir
 
 (width, height) = (1800, 1200)
 entities = []
@@ -24,10 +25,24 @@ def main():
 
     t = 0
     dt = 0.01  # Delta time, amount to increase time by per iteration of sim
-    duration = 150
+    duration = 25
 
-    entities.append(FCSquare((50, 50), 4, 75))
-    #entities.append(CElegen((50, 50), 8, 50))
+    #entities.append(FCSquare((50, 50), 2, 50))
+
+
+    entities.append(Reservoir((50, 50), 2, 50))
+
+    entities.append(Reservoir((150, 50), 2, 50))
+    entities.append(Reservoir((250, 50), 2, 50))
+
+    entities.append(Reservoir((50, 150), 2, 50))
+    entities.append(Reservoir((50, 250), 2, 50))
+
+    entities.append(Reservoir((150, 150), 2, 50))
+    entities.append(Reservoir((150, 250), 2, 50))
+
+    entities.append(Reservoir((250, 150), 2, 50))
+    entities.append(Reservoir((250, 250), 2, 50))
 
     if animate:
         screen = pygame.display.set_mode((width, height))
@@ -49,7 +64,11 @@ def main():
                             pos = get_pos()
                             entities[0].move_to_cursor(pos)
 
+                    if event.button == 3:
+                        print(entities[0].get_displacement())
+
         for e in entities:
+            e.step(dt)
             e.update(dt)
 
         if animate:

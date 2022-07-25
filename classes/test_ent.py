@@ -8,7 +8,7 @@ import numpy as np
 
 
 class Test(Entity):
-    """Creates a square entity."""
+    """Creates an entity for testing ideas."""
 
     def __init__(self, pos):
         """
@@ -18,11 +18,8 @@ class Test(Entity):
         ------
         pos: tuple
         (x, y) position of top left particle of Test Entity.
-
-        spacing: int
-        Space between particles when at rest.
-        
         """
+        
         super(Test, self).__init__(pos)
 
         particles = []

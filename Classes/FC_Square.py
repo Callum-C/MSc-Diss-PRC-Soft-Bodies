@@ -30,8 +30,8 @@ class FCSquare(Entity):
 
         fill: hex code
         Colour to draw particles as
-        
         """
+
         super(FCSquare, self).__init__(pos)
         self.draw_parts = draw_parts
 

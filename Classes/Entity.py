@@ -34,6 +34,14 @@ class Entity:
         for spring in self.springs:
             spring.draw(screen)
 
+    def step(self, dt):
+        """
+        Step function for entities with controllers.
+
+        Not implemented here in parent, here to prevent errors.
+        """
+        NotImplemented
+
     def add_force(self, changes):
         """
         Add Force to springs.

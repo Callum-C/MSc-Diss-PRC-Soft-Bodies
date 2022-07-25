@@ -27,11 +27,13 @@ class Spring:
         fill: tuple
         (r, g, b) colour value for pygame.draw
         """
-        
-        self.A = A 
+
+        self.A = A
         self.B = B
         self.rest_length = rest_length
         self.k = k 
+        self.length = 0
+        self.x = 0 # Spring displacement, length spring is compressed or extended from its rest length
 
         self.force = np.array((0.0, 0.0))
         self.f_change = np.array((0.0, 0.0)) # Some change to force, used in self.add_force()
@@ -49,15 +51,15 @@ class Spring:
         """Update Spring force."""
         
         spring_vector = self.B.get_pos() - self.A.get_pos()
-        spring_length = np.linalg.norm(spring_vector)
-        x = spring_length - self.rest_length
+        self.length = np.linalg.norm(spring_vector)
+        self.x = self.length - self.rest_length
 
         v_hat = 0
-        if spring_length != 0:
-            v_hat = spring_vector / spring_length   # Unit vector 
+        if self.length != 0:
+            v_hat = spring_vector / self.length   # Unit vector
 
-        self.length = spring_length
-        self.force = ((self.k * x) * v_hat) + self.f_change
+
+        self.force = ((self.k * self.x) * v_hat) + self.f_change
         self.f_change = 0
 
         self.forces.append(self.force)
@@ -147,3 +149,16 @@ class Spring:
         """Return Spring Force Vector"""
 
         return self.force
+
+    def set_rest_length(self, new_len):
+        """
+        Change Spring's rest length.
+
+        Params
+        ------
+
+        new_len: float
+        Spring's new rest length
+        """
+
+        self.rest_length = new_len
