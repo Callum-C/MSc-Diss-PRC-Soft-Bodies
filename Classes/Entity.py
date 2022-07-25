@@ -7,6 +7,8 @@ class Entity:
     def __init__(self, pos):
         """Create new entity."""
 
+        self.head = None
+
         self.particles = []
         self.springs = []
 
@@ -47,6 +49,14 @@ class Entity:
 
     # --- Getters and Setters --- #
 
+    def has_head(self):
+        """if entity has a particle assigned as its 'head'."""
+
+        if self.head:
+            return True
+        else:
+            return False
+
     def get_spring_lengths(self):
         """Retrieve Length of All Springs."""
 
@@ -71,7 +81,7 @@ class Entity:
         for spring in self.springs:
             forces.append(spring.get_max_force())
 
-        return(max(forces))
+        return max(forces)
 
     def get_min_force(self):
         """Searches all entity spring's and returns the min force exerted."""
@@ -80,4 +90,4 @@ class Entity:
         for spring in self.springs:
             forces.append(spring.get_min_force())
 
-        return(min(forces))
+        return min(forces)

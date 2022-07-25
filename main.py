@@ -11,7 +11,7 @@ from Classes.C_Elegen import CElegen
 from Classes.TestEnt import Test
 from Classes.FC_Square import FCSquare
 
-(width, height) = (1800, 900)
+(width, height) = (1800, 1200)
 entities = []
 titlefont = None
 myfont = None
@@ -26,7 +26,7 @@ def main():
     dt = 0.01  # Delta time, amount to increase time by per iteration of sim
     duration = 150
 
-    entities.append(FCSquare((50, 50), 6, 75, SILVER))
+    entities.append(FCSquare((50, 50), 4, 75, SILVER))
 
     if animate:
         screen = pygame.display.set_mode((width, height))
@@ -36,10 +36,17 @@ def main():
     while t < duration and running:
         if animate:
             clock.tick(144)
+
             events = pygame.event.get()
             for event in events:
                 if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                     running = False
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        if entities[0].has_head():
+                            pos = get_pos()
+                            entities[0].move_to_cursor(pos)
 
         for e in entities:
             e.update(dt)
@@ -56,7 +63,7 @@ def get_pos():
     """Get position of mouse cursor."""
     pos = pygame.mouse.get_pos()
     pos = (float(pos[0]), float(pos[1]))
-    return (pos)
+    return pos
 
 
 def screen_setup(entities, screen):
@@ -100,7 +107,7 @@ def update_screen(entities, screen):
     for e in entities:
         e.draw(screen)
 
-    """
+
     title = titlefont.render("Spring Lengths and Forces", 5, SILVER)
     screen.blit(title, (1400, 100))
     
@@ -114,7 +121,7 @@ def update_screen(entities, screen):
     for i, force in enumerate(entities[0].get_spring_forces()):
         label = myfont.render("{}".format(force), 1, SILVER)
         screen.blit(label, (1500, (150 + i * 50)))
-    """
+
 
     pygame.display.update()
 

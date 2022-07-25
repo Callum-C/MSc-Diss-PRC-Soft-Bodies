@@ -61,6 +61,7 @@ class FCSquare(Entity):
 
         self.particles = particles
         self.springs = springs
+        self.head = particles[0][0]
 
     def update(self, dt):
         """
@@ -75,6 +76,19 @@ class FCSquare(Entity):
             for particle in row:
                 particle.update_pos(dt)
 
+    def move_to_cursor(self, pos):
+        """
+        Move head of Elegen to mouse cursor.
+
+        Params
+        ------
+
+        pos: tuple
+        (x, y) position to move to.
+        """
+
+        self.head.set_pos(pos)
+
     def draw(self, screen):
         """
         Draw square to screen.
@@ -87,4 +101,6 @@ class FCSquare(Entity):
         """for row in self.particles:
             for particle in row:
                 particle.draw(screen)"""
+
+    # --- Getters and Setters --- #
 
