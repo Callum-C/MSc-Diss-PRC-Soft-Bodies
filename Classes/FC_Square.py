@@ -1,6 +1,7 @@
-from Classes.Entity import Entity
-from Classes.Particle import Particle
-from Classes.Spring import Spring
+from classes.entity import Entity
+from classes.particle import Particle
+from classes.spring import Spring
+from colours import SILVER
 
 import numpy as np
 import math
@@ -9,7 +10,7 @@ import math
 class FCSquare(Entity):
     """Creates a Fully Connected square entity."""
 
-    def __init__(self, pos, size, spacing, fill):
+    def __init__(self, pos, size, spacing, draw_parts=False, fill=SILVER):
         """
         Create a fully connected Square Entity.
         
@@ -23,9 +24,16 @@ class FCSquare(Entity):
 
         spacing: int
         Space between particles when at rest.
+
+        draw_parts: boolean
+        Draw particles, false here will only draw springs.
+
+        fill: hex code
+        Colour to draw particles as
         
         """
         super(FCSquare, self).__init__(pos)
+        self.draw_parts = draw_parts
 
         particles = []
         springs = []
@@ -98,9 +106,10 @@ class FCSquare(Entity):
 
         super(FCSquare, self).draw(screen)
 
-        """for row in self.particles:
-            for particle in row:
-                particle.draw(screen)"""
+        if self.draw_parts:
+            for row in self.particles:
+                for particle in row:
+                    particle.draw(screen)
 
     # --- Getters and Setters --- #
 

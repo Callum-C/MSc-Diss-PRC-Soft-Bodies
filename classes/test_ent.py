@@ -1,6 +1,6 @@
-from Classes.Entity import Entity
-from Classes.Particle import Particle
-from Classes.Spring import Spring
+from classes.entity import Entity
+from classes.particle import Particle
+from classes.spring import Spring
 
 from colours import SILVER
 

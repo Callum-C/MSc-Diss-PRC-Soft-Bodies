@@ -1,7 +1,6 @@
-from turtle import update
-from Classes.Entity import Entity
-from Classes.Particle import Particle
-from Classes.Spring import Spring
+from classes.entity import Entity
+from classes.particle import Particle
+from classes.spring import Spring
 
 from colours import SILVER, FILL
 
@@ -46,7 +45,7 @@ class CElegen(Entity):
         for i in range(1, size):
             group_particles = []
             # Create first particle in pair for stage of body
-            ppos = np.array((self.pos[0] + (i * spacing) + (i * 30), self.pos[1] - 20))
+            ppos = np.array((self.pos[0] + (i * spacing), self.pos[1] - 20))
             group_particles.append(Particle(ppos, SILVER, 1))
 
             # Create second particle in pair for stage of body
@@ -94,7 +93,7 @@ class CElegen(Entity):
         self.head.set_pos(pos)
 
 
-    def update(self):
+    def update(self, dt):
         """
         Update all springs and particles in the elegen.
 
@@ -105,7 +104,7 @@ class CElegen(Entity):
 
         for group in self.particles:
             for particle in group:
-                particle.update_pos()
+                particle.update_pos(dt)
 
 
     def draw(self, screen):

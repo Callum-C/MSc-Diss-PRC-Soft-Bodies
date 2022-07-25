@@ -50,7 +50,7 @@ class Entity:
     # --- Getters and Setters --- #
 
     def has_head(self):
-        """if entity has a particle assigned as its 'head'."""
+        """If entity has a particle assigned as its 'head'."""
 
         if self.head:
             return True
@@ -75,7 +75,7 @@ class Entity:
         return forces
 
     def get_max_force(self):
-        """Searches all entity spring's and returns the max force exerted."""
+        """Searches all entity springs and returns the max force exerted."""
 
         forces = []
         for spring in self.springs:
@@ -84,7 +84,7 @@ class Entity:
         return max(forces)
 
     def get_min_force(self):
-        """Searches all entity spring's and returns the min force exerted."""
+        """Searches all entity springs and returns the min force exerted."""
 
         forces = []
         for spring in self.springs:

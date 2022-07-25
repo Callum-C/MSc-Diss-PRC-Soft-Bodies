@@ -4,12 +4,12 @@ import math
 
 from colours import FILL, SILVER, BACKGROUND_COLOUR, RED
 
-from Classes.Particle import Particle
-from Classes.Spring import Spring
-from Classes.Square import Square
-from Classes.C_Elegen import CElegen
-from Classes.TestEnt import Test
-from Classes.FC_Square import FCSquare
+from classes.particle import Particle
+from classes.spring import Spring
+from classes.square import Square
+from classes.c_elegen import CElegen
+from classes.test_ent import Test
+from classes.fc_square import FCSquare
 
 (width, height) = (1800, 1200)
 entities = []
@@ -26,7 +26,8 @@ def main():
     dt = 0.01  # Delta time, amount to increase time by per iteration of sim
     duration = 150
 
-    entities.append(FCSquare((50, 50), 4, 75, SILVER))
+    entities.append(FCSquare((50, 50), 4, 75))
+    #entities.append(CElegen((50, 50), 8, 50))
 
     if animate:
         screen = pygame.display.set_mode((width, height))
