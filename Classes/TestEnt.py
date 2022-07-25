@@ -38,17 +38,23 @@ class Test(Entity):
         self.particles = particles
         self.springs = springs
 
-    def update(self):
+    def update(self, dt):
         """
         Update all springs and particles in the Test Entity.
 
         Called every frame / iteration.
+
+        Params
+        ------
+
+        dt: float
+        delta t, change in time
         """
 
         super(Test, self).update()
 
         for particle in self.particles:
-            particle.update_pos()
+            particle.update_pos(dt)
 
     def draw(self, screen):
         """
