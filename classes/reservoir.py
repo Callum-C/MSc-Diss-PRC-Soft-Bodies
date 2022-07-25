@@ -34,12 +34,12 @@ class Reservoir(FCSquare):
         """
 
         super().__init__(pos, size, spacing, draw_parts, fill)
+        self.start_pos = self.get_center()  # Position of center of the entity
 
         self.t = 0 # Tracks time since last lock switch
 
         size = len(self.springs)
         self.W = np.random.uniform(-0.5, 0.5, (size, size)) # Reservoir weights
-        self.start_pos = self.get_center()
 
         # Particle Groups
         self.left = [self.particles[0][0], self.particles[0][1]]
@@ -87,21 +87,6 @@ class Reservoir(FCSquare):
             self.locked = 'left'
 
     # --- Getters and Setters --- #
-
-    def get_center(self):
-        """Get center of entity."""
-
-        p1 = np.add(self.particles[0][0].get_pos(), self.particles[1][0].get_pos())
-        p2 = np.add(self.particles[0][1].get_pos(), self.particles[1][1].get_pos())
-        sum = np.add(p1, p2)
-
-        return sum / 4
-
-    def get_distance(self):
-        """Uses starting position to calculate distance travelled."""
-
-        dist = self.get_center() - self.start_pos
-        return dist
 
     def get_displacement(self):
         """Get Displacement of all entity's springs.

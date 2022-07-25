@@ -12,7 +12,7 @@ class Entity:
         self.particles = []
         self.springs = []
 
-        self.pos = (float(pos[0]), float(pos[1]))
+        self.pos = (float(pos[0]), float(pos[1])) # Position of first / top left particle
 
     def update(self):
         """
@@ -64,6 +64,29 @@ class Entity:
             return True
         else:
             return False
+
+    def get_center(self):
+        """Get center of entity."""
+
+        try:
+            p1 = np.add(self.particles[0][0].get_pos(), self.particles[1][0].get_pos())
+            p2 = np.add(self.particles[0][1].get_pos(), self.particles[1][1].get_pos())
+            sum = np.add(p1, p2)
+
+            return sum / 4
+        except:
+            print("Exception in self.get_center()")
+
+    def get_distance(self):
+        """
+        Uses starting position to calculate distance travelled.
+
+        distance[0] - Movement left to right
+        distance[1] - Movement up to down
+        """
+
+        dist = self.get_center() - self.start_pos
+        return dist
 
     def get_spring_lengths(self):
         """Retrieve Length of All Springs."""

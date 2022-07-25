@@ -20,6 +20,7 @@ myfont = None
 
 def main():
     animate = True
+    labels = False # If Statistic labels should be shown
     running = True
     clock = pygame.time.Clock()
 
@@ -27,9 +28,9 @@ def main():
     dt = 0.01  # Delta time, amount to increase time by per iteration of sim
     duration = 25
 
-    #entities.append(FCSquare((50, 50), 2, 50))
+    entities.append(FCSquare((50, 50), 2, 50))
 
-
+    """
     entities.append(Reservoir((50, 50), 2, 50))
 
     entities.append(Reservoir((150, 50), 2, 50))
@@ -43,6 +44,7 @@ def main():
 
     entities.append(Reservoir((250, 150), 2, 50))
     entities.append(Reservoir((250, 250), 2, 50))
+    """
 
     if animate:
         screen = pygame.display.set_mode((width, height))
@@ -65,19 +67,21 @@ def main():
                             entities[0].move_to_cursor(pos)
 
                     if event.button == 3:
-                        print(entities[0].get_displacement())
+                        print(entities[0].get_distance())
 
         for e in entities:
             e.step(dt)
             e.update(dt)
 
         if animate:
-            update_screen(entities, screen)
+            update_screen(entities, screen, labels)
 
         # Increment Time
         t += dt
 
     running = False
+
+    print(entities[0].get_distance())
 
 def get_pos():
     """Get position of mouse cursor."""
@@ -109,7 +113,7 @@ def screen_setup(entities, screen):
     update_screen(entities, screen)
 
 
-def update_screen(entities, screen):
+def update_screen(entities, screen, labels=False):
     """
     Update screen, called every frame.
 
@@ -127,21 +131,20 @@ def update_screen(entities, screen):
     for e in entities:
         e.draw(screen)
 
+    if labels:
+        title = titlefont.render("Spring Lengths and Forces", 5, SILVER)
+        screen.blit(title, (1400, 100))
 
-    title = titlefont.render("Spring Lengths and Forces", 5, SILVER)
-    screen.blit(title, (1400, 100))
-    
-    # Draw Spring Lengths to Screen
-    for i, length in enumerate(entities[0].get_spring_lengths()):
-        length = math.floor(length)
-        label = myfont.render("{}".format(length), 1, SILVER)
-        screen.blit(label, (1400, (150 + i * 50)))
+        # Draw Spring Lengths to Screen
+        for i, length in enumerate(entities[0].get_spring_lengths()):
+            length = math.floor(length)
+            label = myfont.render("{}".format(length), 1, SILVER)
+            screen.blit(label, (1400, (150 + i * 50)))
 
-    # Draw Spring Forces to Screen
-    for i, force in enumerate(entities[0].get_spring_forces()):
-        label = myfont.render("{}".format(force), 1, SILVER)
-        screen.blit(label, (1500, (150 + i * 50)))
-
+        # Draw Spring Forces to Screen
+        for i, force in enumerate(entities[0].get_spring_forces()):
+            label = myfont.render("{}".format(force), 1, SILVER)
+            screen.blit(label, (1500, (150 + i * 50)))
 
     pygame.display.update()
 

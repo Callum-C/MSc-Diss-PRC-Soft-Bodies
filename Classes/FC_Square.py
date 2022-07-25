@@ -69,7 +69,9 @@ class FCSquare(Entity):
 
         self.particles = particles
         self.springs = springs
+
         self.head = particles[0][0]
+        self.start_pos = self.get_center()  # Position of center of the entity
 
     def update(self, dt):
         """
