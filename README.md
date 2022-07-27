@@ -2,12 +2,16 @@
 
 ![InitReservoirGif](https://user-images.githubusercontent.com/60474698/181374108-58aa98d3-b655-44e1-90ae-09e2dd127a48.gif)
 
-The Fully Connected Square below forms the basis of an implementation of Reservoir Computing (RC).
+The Fully Connected Square from below forms the basis of an implementation of Reservoir Computing (RC).
 - Spring displacements are fed into a randomly initialised weight matrix
 - The output becomes the springs new rest length
 
 
 # Soft Body - Fully Connected Square Entity
+- Simulation updated from PyGame led to mathematical basis.
+- Instead of utilising pygame.clock to set the pace of the simulation, time is incremented (dt) by 0.01 per iteration
+- All physics equations use this dt to calculate forces, velocity and distance moved
+- Damping factor of 0.98 is used mostly, however adjusted per entity as needed
 
 ![FCSquareGif](https://user-images.githubusercontent.com/60474698/181373654-cacfdd41-6707-44cf-b6b8-42f75955e455.gif)
 
