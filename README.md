@@ -1,8 +1,15 @@
 # Reservoir Computing
 
+The Fully Connected Square from below forms the basis of an implementation of Reservoir Computing (RC).
+
+![BreakingSpringsGIF](https://user-images.githubusercontent.com/60474698/181378437-ab06ef45-6faf-4941-9607-d721bd6c5f32.gif)
+
+Springs have an initial set rest length, should springs extend to be more than 5 times the size of this initial rest length, they "break"
+- A broken spring no longer exerts a force
+- Furthermore they are no longer drawn to the screen
+
 ![InitReservoirGif](https://user-images.githubusercontent.com/60474698/181374108-58aa98d3-b655-44e1-90ae-09e2dd127a48.gif)
 
-The Fully Connected Square from below forms the basis of an implementation of Reservoir Computing (RC).
 - Spring displacements are fed into a randomly initialised weight matrix
 - The output becomes the springs new rest length
 
