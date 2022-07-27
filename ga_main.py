@@ -1,12 +1,9 @@
-import pygame
 import numpy as np
 import math
-import time
 import random
 from random import randrange
+import os
 
-from classes.test_ent import Test
-from classes.fc_square import FCSquare
 from classes.reservoir import Reservoir
 from ga_functions import fitness, mutate_locus
 
@@ -15,7 +12,6 @@ entities = []
 titlefont = None
 myfont = None
 
-
 def main():
     """
     Code inspirations:
@@ -23,6 +19,21 @@ def main():
     Microbial GA ECAL2009 - Inmanh (In Reading Directory)
         - GA Selection Method
     """
+
+    flag = True
+    i = 0
+    filename = "GA-Training"
+    file = filename + ".txt"
+    if os.path.exists(file):
+        while flag:
+            if os.path.exists(file):
+                print("File exists")
+                file = filename + str(i) + ".txt"
+                f = open(file, 'a')
+                f.close()
+                flag = False
+            i += 1
+
     running = True
 
     start_pos = (50, 50)
@@ -30,8 +41,8 @@ def main():
     dt = 0.01  # Delta time, amount to increase time by per iteration of sim
     duration = 10
 
-    pop_size = 30  # Population Size
-    num_of_gens = 100  # Number of generations to perform
+    pop_size = 100  # Population Size
+    num_of_gens = 1000  # Number of generations to perform
     global_stats = None
 
     size = 2
@@ -42,6 +53,7 @@ def main():
 
     # Perform GA
     max_fit = -1000
+    best_perf = {'gen': 0, 'max_fit': -1000, 'weights': None}
     for gen in range(num_of_gens):
         print("\nPerforming Generation: {}".format(gen))
 
@@ -54,10 +66,14 @@ def main():
 
         print(" - Generation Stats: Avg: {} Max: {}".format(stats['avg'], stats['max_fit']))
 
-        if stats['max_fit'] > max_fit:
-            max_fit = stats['max_fit']
-            weights = stats['fittest_pheno'].get_weights()
-            print(" - New Max Weights: {}\n".format(weights))
+        if stats['max_fit'] > best_perf['max_fit']:
+            best_perf['gen'] = gen
+            best_perf['max_fit'] = stats['max_fit']
+            best_perf['weights'] = stats['fittest_pheno'].get_weights()
+            print(" - New Max Weights: {}\n".format(repr(best_perf['weights'])))
+            f = open(file, "a")
+            f.write("Gen: {} Fitness: {} Weights: {} \n\n".format(gen, best_perf['max_fit'], repr(best_perf['weights'])))
+            f.close()
 
     running = False
 
