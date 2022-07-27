@@ -41,7 +41,7 @@ class FCSquare(Entity):
             row_particles = []
 
             for j in range(size):
-                ppos = np.array((self.pos[0] + (i * (spacing * 3)), self.pos[1] + (j * (spacing * 3))))
+                ppos = np.array((self.pos[0] + (i * (spacing)), self.pos[1] + (j * (spacing))))
                 row_particles.append(Particle(ppos, fill))
 
                 # Vertical Springs

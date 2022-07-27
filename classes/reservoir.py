@@ -1,3 +1,5 @@
+import copy
+
 import pygame
 import numpy as np
 
@@ -10,7 +12,7 @@ from colours import SILVER
 
 class Reservoir(FCSquare):
 
-    def __init__(self, pos, size, spacing, draw_parts=False, fill=SILVER):
+    def __init__(self, pos, size, spacing, weights=None, draw_parts=False, fill=SILVER):
         """
         Create a Reservoir Object.
         Creates a fully connected square entity controlled by a Reservoir.
@@ -26,6 +28,9 @@ class Reservoir(FCSquare):
         spacing: int
         Space between particles when at rest.
 
+        weights: array(size, size)
+        Weight matrix for the Reservoir, if none will be randomly initialised
+
         draw_parts: boolean
         Draw particles, false here will only draw springs.
 
@@ -36,16 +41,20 @@ class Reservoir(FCSquare):
         super().__init__(pos, size, spacing, draw_parts, fill)
         self.start_pos = self.get_center()  # Position of center of the entity
 
-        self.t = 0 # Tracks time since last lock switch
+        self.t = 0  # Tracks time since last lock switch
 
         size = len(self.springs)
-        self.W = np.random.uniform(-0.5, 0.5, (size, size)) # Reservoir weights
+
+        if weights is not None:
+            self.W = weights
+        else:
+            self.W = np.random.uniform(-0.5, 0.5, (size, size))  # Reservoir weights
 
         # Particle Groups
         self.left = [self.particles[0][0], self.particles[0][1]]
         self.right = [self.particles[1][0], self.particles[1][1]]
-        self.locked = 'left'
-        for particle in self.left:
+        self.locked = 'right'
+        for particle in self.right:
             particle.locked = True
 
     def step(self, dt):
@@ -66,7 +75,6 @@ class Reservoir(FCSquare):
         if 0.98 <= self.t <= 1.08:
             self.switch_lock()
             self.t = 0
-            print(self.get_distance())
 
         self.t += dt
 
@@ -88,8 +96,13 @@ class Reservoir(FCSquare):
 
     # --- Getters and Setters --- #
 
+    def get_weights(self):
+        """Returns this objects weight matrix."""
+        return self.W
+
     def get_displacement(self):
-        """Get Displacement of all entity's springs.
+        """
+        Get Displacement of all entity's springs.
 
         Returns
         -------

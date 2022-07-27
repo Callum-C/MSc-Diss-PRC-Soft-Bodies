@@ -31,9 +31,12 @@ class Spring:
         self.A = A
         self.B = B
         self.rest_length = rest_length
+        self.orig_rest_length = rest_length # Rest length at start
         self.k = k 
         self.length = 0
         self.x = 0 # Spring displacement, length spring is compressed or extended from its rest length
+        self.broken = False # If spring has stretched too far and "broke"
+
 
         self.force = np.array((0.0, 0.0))
         self.f_change = np.array((0.0, 0.0)) # Some change to force, used in self.add_force()
@@ -49,30 +52,33 @@ class Spring:
 
     def update(self):
         """Update Spring force."""
-        
-        spring_vector = self.B.get_pos() - self.A.get_pos()
-        self.length = np.linalg.norm(spring_vector)
-        self.x = self.length - self.rest_length
 
-        v_hat = 0
-        if self.length != 0:
-            v_hat = spring_vector / self.length   # Unit vector
+        if not self.broken:
+            spring_vector = self.B.get_pos() - self.A.get_pos()
+            self.length = np.linalg.norm(spring_vector)
+            self.x = self.length - self.rest_length
 
+            if not self.broken and self.length > 5 * self.orig_rest_length:
+                self.broken = True
 
-        self.force = ((self.k * self.x) * v_hat) + self.f_change
-        self.f_change = 0
+            v_hat = 0
+            if self.length != 0:
+                v_hat = spring_vector / self.length   # Unit vector
 
-        self.forces.append(self.force)
+            self.force = ((self.k * self.x) * v_hat) + self.f_change
+            self.f_change = 0
 
-        # Update Spring display colour
-        key = self.get_colour_key()
-        self.fill = B_R_GRADIENT[key]
+            self.forces.append(self.force)
 
-        # Apply Force
-        self.A.apply_force(self.force)
-        # - Invert Force
-        self.force = -1 * self.force
-        self.B.apply_force(self.force)
+            # Update Spring display colour
+            key = self.get_colour_key()
+            self.fill = B_R_GRADIENT[key]
+
+            # Apply Force
+            self.A.apply_force(self.force)
+            # - Invert Force
+            self.force = -1 * self.force
+            self.B.apply_force(self.force)
 
     def draw(self, screen):
         """
@@ -83,8 +89,8 @@ class Spring:
         Screen: PyGame Screen
         Display to draw Spring to.
         """
-       
-        pygame.draw.line(screen, self.fill, self.A.get_pos(), self.B.get_pos(), 2)
+        if not self.broken:
+            pygame.draw.line(screen, self.fill, self.A.get_pos(), self.B.get_pos(), 2)
 
     def get_colour_key(self):
         """Get colour gradient key for display."""

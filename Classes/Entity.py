@@ -66,7 +66,11 @@ class Entity:
             return False
 
     def get_center(self):
-        """Get center of entity."""
+        """
+        Get center of entity.
+
+        TODO - Allow for more particles
+        """
 
         try:
             p1 = np.add(self.particles[0][0].get_pos(), self.particles[1][0].get_pos())
