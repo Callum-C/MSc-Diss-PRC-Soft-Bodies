@@ -22,6 +22,11 @@ Springs have an initial set rest length, should springs extend to be more than 5
 
 ![FCSquareGif](https://user-images.githubusercontent.com/60474698/181373654-cacfdd41-6707-44cf-b6b8-42f75955e455.gif)
 
+Damping of 0.99, Different sizes of soft bodys react differently to different damping values
+Springs appear to "support" each other in larger bodies
+
+![DifferentSizesGif](https://user-images.githubusercontent.com/60474698/181380023-59d06e53-f8c5-4374-9af9-1391c885b02e.gif)
+
 - Square starts out stretched out, the springs attempt to return to their rest lengths.
 - Particles are still present but are not being drawn to the screen for a clearer display and to save processing power.
 
