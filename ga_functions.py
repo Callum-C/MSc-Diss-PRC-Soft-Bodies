@@ -22,7 +22,7 @@ def fitness(reservoir):
 def mutate(weights, mutations=1, lr=0.01):
     """
     Mutate controller.
-    - Take passed weights, mutate them, set them as own weights.
+    - Take passed weights and mutate them
 
     Params
     ------
@@ -54,3 +54,29 @@ def mutate(weights, mutations=1, lr=0.01):
             mutated[index] = mutated[index] - lr
 
     return mutated
+
+
+def mutate_locus(weight, lr=0.01):
+    """
+    Mutate an individual weight, or locus.
+
+    Params
+    ------
+    weight: float
+    weight to mutate
+
+    lr: float
+    learning rate, amount to change the weight by
+
+    Returns
+    -------
+    weight: float
+    the new mutated weight
+    """
+
+    if random.random() < 0.5:
+        weight += lr
+    else:
+        weight -= lr
+
+    return weight

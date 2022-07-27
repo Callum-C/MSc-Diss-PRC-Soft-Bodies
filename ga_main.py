@@ -2,11 +2,13 @@ import pygame
 import numpy as np
 import math
 import time
+import random
+from random import randrange
 
 from classes.test_ent import Test
 from classes.fc_square import FCSquare
 from classes.reservoir import Reservoir
-from ga_functions import fitness, mutate
+from ga_functions import fitness, mutate_locus
 
 (width, height) = (1800, 1200)
 entities = []
@@ -15,6 +17,12 @@ myfont = None
 
 
 def main():
+    """
+    Code inspirations:
+
+    Microbial GA ECAL2009 - Inmanh (In Reading Directory)
+        - GA Selection Method
+    """
     running = True
 
     start_pos = (50, 50)
@@ -22,23 +30,34 @@ def main():
     dt = 0.01  # Delta time, amount to increase time by per iteration of sim
     duration = 10
 
-    pop_size = 6  # Population Size
+    pop_size = 30  # Population Size
     num_of_gens = 100  # Number of generations to perform
-    num_of_mutations = 3
     global_stats = None
 
-    init_pop = create_init_pop(pop_size, start_pos, 2, 50)
+    size = 2
+    spacing = 50
+
+    init_pop = create_init_pop(pop_size, start_pos, size, spacing)
     population = [init_pop]
 
     # Perform GA
+    max_fit = -1000
     for gen in range(num_of_gens):
+        print("\nPerforming Generation: {}".format(gen))
+
         run_sim_once(population[gen], duration, dt)
+        next_gen = perform_generation_tournaments(population[gen], pop_size, start_pos, size, spacing)
+        population.append(next_gen)
+
         stats = assess_gen_fitness(population[gen])
-
-        # Perform Selection
-
-
         global_stats = track_all_stats(stats, global_stats)
+
+        print(" - Generation Stats: Avg: {} Max: {}".format(stats['avg'], stats['max_fit']))
+
+        if stats['max_fit'] > max_fit:
+            max_fit = stats['max_fit']
+            weights = stats['fittest_pheno'].get_weights()
+            print(" - New Max Weights: {}\n".format(weights))
 
     running = False
 
@@ -100,6 +119,97 @@ def run_sim_once(generation, duration, dt):
         t += dt
 
 
+def perform_generation_tournaments(generation, pop_size, start_pos=(50,50), size=2, spacing=50):
+    """
+    Perform all tournaments for a single generation.
+
+    Params
+    ------
+    generation: list(Reservoir)
+    current generation
+
+    pop_size: int
+    population size
+
+    start_pos: tuple(int, int)
+    starting position of reservoir entities
+
+    size: int
+    size of entity, 2 here makes a 2x2 square
+
+    spacing: int
+    space between particles when at rest
+
+    Returns
+    -------
+    next_gen: list(Reservoir)
+    Next generation
+    """
+
+    next_gen = []
+    temp_gen = np.array(generation)
+    for i in range(int(pop_size/2)):
+        temp_gen, win_weights, loss_weights = microbial_tournament(temp_gen)
+        next_gen.append(Reservoir(start_pos, size, spacing, win_weights))
+        next_gen.append(Reservoir(start_pos, size, spacing, loss_weights))
+
+    return next_gen
+
+
+def microbial_tournament(generation, local=5, rec=0.5, mut=0.5):
+    """
+    Perform microbial tournament
+
+    Params
+    ------
+    generation: list(Reservoir)
+    Generation of Reservoir entities to select parents from.
+
+    pop_size: int
+    Population size
+
+    local: int
+    Neighborhood to look for B's index from A's Index
+
+    rec: float
+    Probability to recombine locus
+
+    mut: float
+    Probability to mutate locus
+
+    Returns
+    -------
+    winner_weights: array(floats)
+    Weights of the Tournament winner
+
+    loser_weights: array(floats)
+    Microbial weights from A, B and Mutations
+    """
+
+    Ai = randrange(len(generation))  # Index of A
+    A = generation[Ai]
+    generation = np.delete(generation, Ai, 0)
+
+    Bi = abs((Ai + 1 + math.ceil(local * random.random())) % len(generation))   # Index of B
+    B = generation[Bi]
+    generation = np.delete(generation, Bi, 0)
+
+    if fitness(A) > fitness(B):
+        winner_weights = A.get_weights()
+        loser_weights = B.get_weights()
+    else:
+        winner_weights = B.get_weights()
+        loser_weights = A.get_weights()
+
+    for i in range(len(loser_weights)):
+        if random.random() < rec:
+            loser_weights[i] = winner_weights[i]
+        if random.random() < mut:
+            loser_weights[i] = mutate_locus(loser_weights[i])
+
+    return generation, winner_weights, loser_weights
+
+
 def assess_gen_fitness(generation):
     """
     Assess Fitness of a Generation
@@ -123,7 +233,7 @@ def assess_gen_fitness(generation):
     for pheno in generation:
         fit = fitness(pheno)
 
-        if pheno is not None:
+        if fittest_pheno is not None:
             running_total += fit
         else:
             max_gen_fit = fit
@@ -159,12 +269,12 @@ def track_all_stats(gen_stats, global_stats):
     """
 
     if global_stats is not None:
-        for key, value in gen_stats:
+        for key, value in gen_stats.items():
             global_stats[key].append(value)
     else:
         # Initialise Global Stats
         global_stats = {}
-        for key, value in gen_stats:
+        for key, value in gen_stats.items():
             global_stats[key] = [value]
 
     return global_stats
