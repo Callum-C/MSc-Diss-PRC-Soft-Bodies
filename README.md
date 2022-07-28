@@ -1,7 +1,49 @@
-# Spring-Damper
-Testing Spring Dampers in Python.
+# Reservoir Computing
 
-# Entity Investigation
+The Fully Connected Square entity (see further down) forms the basis of an implementation of Reservoir Computing (RC).
+
+Springs have an initial set rest length, should springs extend to be more than 5 times the size of this initial rest length, they "break"
+- A broken spring no longer exerts a force
+- Furthermore they are no longer drawn to the screen
+
+![BreakingSpringsGIF](https://user-images.githubusercontent.com/60474698/181378437-ab06ef45-6faf-4941-9607-d721bd6c5f32.gif)
+
+- Spring displacements are fed into a randomly initialised weight matrix
+- The output becomes the springs new rest length
+
+![InitReservoirGif](https://user-images.githubusercontent.com/60474698/181374108-58aa98d3-b655-44e1-90ae-09e2dd127a48.gif)
+
+
+# Soft Body - Fully Connected Square Entity
+- Simulation updated from PyGame led to mathematical basis.
+- Instead of utilising pygame.clock to set the pace of the simulation, time is incremented (dt) by 0.01 per iteration
+- All physics equations use this dt to calculate forces, velocity and distance moved
+- Damping factor of 0.98 is used mostly, however adjusted per entity as needed
+
+![FCSquareGif](https://user-images.githubusercontent.com/60474698/181373654-cacfdd41-6707-44cf-b6b8-42f75955e455.gif)
+
+Damping of 0.99, Different sizes of soft bodys react differently to different damping values
+Springs appear to "support" each other in larger bodies
+
+![DifferentSizesGif](https://user-images.githubusercontent.com/60474698/181380023-59d06e53-f8c5-4374-9af9-1391c885b02e.gif)
+
+- Square starts out stretched out, the springs attempt to return to their rest lengths.
+- Particles are still present but are not being drawn to the screen for a clearer display and to save processing power.
+
+
+# Mass Spring Damper Investigation
+Testing Mass Spring Dampers in Python.
+- PyGame is used purely to animate the calculations giving visual representation 
+
+## Entity Investigation
+
+![TowardEleganGif](https://user-images.githubusercontent.com/60474698/181374686-da4f568d-b4ed-4e42-93bd-1e4507fc6664.gif)
+
+Rope like entity, springs connected in a long chain.
+- First particle instantiated in the entity is labelled as the entity's "head"
+- Head responds to mouse input, can be moved around and "locked" in place
+- When a particle is locked in place, it is unaffected by phyics
+
 
 Spring colour changing based on force being exerted.
 - Simulation slowed down to 30 frames per second (FPS) and Springs drawn thicker to better show colour change.
@@ -17,7 +59,7 @@ Square behaviour when particles maintain velocity.
 
 ![InfiniteSquareGif](https://user-images.githubusercontent.com/60474698/172199059-3622318e-ffce-4b36-a035-09a6e262402f.gif)
 
-# Basic Spring Origins
+## Basic Spring Origins
 
 2D Spring Implementation with some simple Gravity.
 
