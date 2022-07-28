@@ -5,7 +5,7 @@ from random import randrange
 import os
 
 from classes.reservoir import Reservoir
-from ga_functions import fitness, mutate_locus
+from ga_functions import fitness, mutate_locus, make_file
 
 (width, height) = (1800, 1200)
 entities = []
@@ -20,20 +20,6 @@ def main():
         - GA Selection Method
     """
 
-    flag = True
-    i = 0
-    filename = "GA-Training"
-    file = filename + ".txt"
-    if os.path.exists(file):
-        while flag:
-            if os.path.exists(file):
-                print("File exists")
-                file = filename + str(i) + ".txt"
-                f = open(file, 'a')
-                f.close()
-                flag = False
-            i += 1
-
     running = True
 
     start_pos = (50, 50)
@@ -41,19 +27,24 @@ def main():
     dt = 0.01  # Delta time, amount to increase time by per iteration of sim
     duration = 10
 
-    pop_size = 100  # Population Size
-    num_of_gens = 1000  # Number of generations to perform
+    pop_size = 30  # Population Size
+    num_of_gens = 5000  # Number of generations to perform
     global_stats = None
 
+    max_weight = 0.5
     size = 2
     spacing = 50
 
-    init_pop = create_init_pop(pop_size, start_pos, size, spacing)
+    method_params = {"method": "Microbial", "sim_duration": duration, "pop_size": pop_size,
+                     "gen_size": num_of_gens, "weight_search": max_weight}
+    file = make_file(method_params)
+
+    init_pop = create_init_pop(pop_size, start_pos, max_weight, size, spacing)
     population = [init_pop]
 
     # Perform GA
     max_fit = -1000
-    best_perf = {'gen': 0, 'max_fit': -1000, 'weights': None}
+    best_perf = {'gen': 0, 'max_fit': -2000, 'weights': None}
     for gen in range(num_of_gens):
         print("\nPerforming Generation: {}".format(gen))
 
@@ -77,9 +68,12 @@ def main():
 
     running = False
 
+    f = open(file, "a")
+    f.write("\nGenerations: {} Fitness: {} \n".format(num_of_gens, max(global_stats['max_fit'])))
+    f.close()
 
 
-def create_init_pop(pop_size, start_pos, size=2, spacing=50):
+def create_init_pop(pop_size, start_pos, max_weight=0.5, size=2, spacing=50):
     """
     Create random initial population.
 
@@ -90,6 +84,9 @@ def create_init_pop(pop_size, start_pos, size=2, spacing=50):
 
     start_pos: tuple(int, int)
     starting position of reservoir entity
+
+    max_weight: float
+    The max weight size to initially randomize - 0.5 here yields weights -0.5 to 0.5
 
     size: int
     size of reservoir entity, 2 here makes 2x2 square
@@ -105,8 +102,7 @@ def create_init_pop(pop_size, start_pos, size=2, spacing=50):
 
     init_pop = []
     for i in range(pop_size):
-        init_pop.append(Reservoir(start_pos, size, spacing))
-
+        init_pop.append(Reservoir(start_pos, size, spacing, max_weight=max_weight))
     return init_pop
 
 
@@ -117,6 +113,7 @@ def run_sim_once(generation, duration, dt):
     Params
     ------
     generation: list(Reservoir)
+    The generation to perform the simulation with
     The generation to perform the simulation with
 
     duration: int

@@ -1,11 +1,17 @@
 import copy
 import numpy as np
 import random
+import os
 
 # --- Genetic Algorithm Functions --- #
+
+
 def fitness(reservoir):
     """
     Assess Controller's Fitness.
+
+    As used for Day 1 and Day 2 Sims
+    - 27th and 28th of July
 
     Params
     ------
@@ -13,10 +19,93 @@ def fitness(reservoir):
     Reservoir entity to assess fitness of
 
     TODO - Reward maintaining shape
+         - Improve Y penalty to particle level
+         - Check horizontal springs are parallel
+         - Back group can't "overtake" front group
+         - Bigger Penalty for breaking springs
     """
     distance = reservoir.get_distance()
 
-    return distance[0] - (2.5 * abs(distance[1]))
+    broken = reservoir.get_broken_springs()  # Added for Day2  Sims
+
+    return distance[0] - (2.5 * abs(distance[1])) - (1000 * broken)
+
+def fitness_day3(reservoir):
+    """
+    Assess Controller's Fitness.
+
+    For use on Day 3 Simulations
+
+    Changes from Day 1/2 Fitness:
+        - Bigger penalty for a broken spring
+
+    Params
+    ------
+    reservoir: reservoir
+    Reservoir entity to assess fitness of
+
+    TODO - Reward maintaining shape
+            - Improve Y penalty to particle level
+            - Check horizontal springs are parallel
+            - Back group can't "overtake" front group
+            - Bigger Penalty for breaking springs
+        """
+
+    distance = reservoir.get_distance()
+
+    broken = reservoir.get_broken_springs()
+
+    return distance[0] - (2.5 * abs(distance[1])) - (5000 * broken)
+
+
+def make_file(method_params):
+    """
+    Make a unique file for storing GA Training Data.
+
+    Params
+    ------
+    method_params: dict
+    Dictionary of GA method parameters
+
+    Returns
+    -------
+    file: string
+    file name to store data into
+    """
+
+    directory = "training/"
+    filename = "GA-Training"
+    file = directory + filename + ".txt"
+
+    if os.path.exists(file):
+        flag = True
+        i = 0
+        while flag:
+            if os.path.exists(file):
+                file = directory + filename + str(i) + ".txt"
+            else:
+                f = open(file, 'a')
+                flag = False
+            i += 1
+    else:
+        f = open(file, 'a')
+
+    print("Using file: {}".format(file))
+    f.write("\n-------------------------------------------------------------------------------------------------------")
+    f.write("\n                                --- Method Parameters ---                                            \n")
+    f.write("-------------------------------------------------------------------------------------------------------\n")
+    f.write("\n")
+
+    for key, value in method_params.items():
+        f.write("{}: {}, ".format(str(key), str(value)))
+
+    f.write("\n\n"
+            "======================================================================================================="
+            "\n\n")
+
+    f.close()
+
+    return file
 
 
 def mutate(weights, mutations=1, lr=0.01):

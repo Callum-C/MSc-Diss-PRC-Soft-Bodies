@@ -12,7 +12,7 @@ class Entity:
         self.particles = []
         self.springs = []
 
-        self.pos = (float(pos[0]), float(pos[1])) # Position of first / top left particle
+        self.pos = (float(pos[0]), float(pos[1]))  # Position of first / top left particle
 
     def update(self):
         """
@@ -64,6 +64,25 @@ class Entity:
             return True
         else:
             return False
+
+    def has_broken_spring(self):
+        """Return if entity has at least 1 broken spring."""
+
+        for spring in self.springs:
+            if spring.broken:
+                return True
+
+        return False
+
+    def get_broken_springs(self):
+        """Returns how many springs within the entity are broken."""
+
+        num_of_springs = 0
+        for spring in self.springs:
+            if spring.broken:
+                num_of_springs += 1
+
+        return num_of_springs
 
     def get_center(self):
         """

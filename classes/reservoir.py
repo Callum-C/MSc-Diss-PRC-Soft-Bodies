@@ -12,7 +12,7 @@ from colours import SILVER
 
 class Reservoir(FCSquare):
 
-    def __init__(self, pos, size, spacing, weights=None, draw_parts=False, fill=SILVER):
+    def __init__(self, pos, size, spacing, weights=None, max_weight=0.5, draw_parts=False, fill=SILVER):
         """
         Create a Reservoir Object.
         Creates a fully connected square entity controlled by a Reservoir.
@@ -31,6 +31,9 @@ class Reservoir(FCSquare):
         weights: array(size, size)
         Weight matrix for the Reservoir, if none will be randomly initialised
 
+        max_weight: float
+        The max weight size to initially randomize - 0.5 here yields weights -0.5 to 0.5
+
         draw_parts: boolean
         Draw particles, false here will only draw springs.
 
@@ -42,17 +45,24 @@ class Reservoir(FCSquare):
         self.start_pos = self.get_center()  # Position of center of the entity
 
         self.t = 0  # Tracks time since last lock switch
+        self.fitness = 0  # a running track of fitness throughout the sim, applied to final fitness at the end of sim
 
-        size = len(self.springs)
+        num_of_springs = len(self.springs)
 
         if weights is not None:
             self.W = weights
         else:
-            self.W = np.random.uniform(-0.5, 0.5, (size, size))  # Reservoir weights
+            self.W = np.random.uniform(-max_weight, max_weight, (num_of_springs, num_of_springs))  # Reservoir weights
+
+        self.deviation = 25  # Distance particles can travel in the y-axis before penalised
 
         # Particle Groups
-        self.left = [self.particles[0][0], self.particles[0][1]]
-        self.right = [self.particles[1][0], self.particles[1][1]]
+        self.left = []
+        self.right = []
+        for i in range(size):
+            self.left.append((self.particles[0][i]))
+            self.right.append(self.particles[size-1][i])
+
         self.locked = 'right'
         for particle in self.right:
             particle.locked = True
@@ -72,11 +82,23 @@ class Reservoir(FCSquare):
         Rout = np.dot(displacements, self.W)
         self.set_new_rest_lengths(Rout)
 
+        self.check_particle_deviation()
+
         if 0.98 <= self.t <= 1.08:
             self.switch_lock()
             self.t = 0
 
         self.t += dt
+
+    def check_particle_deviation(self):
+        """Checks how far particles have deviated in the y-axis."""
+
+        for particle in self.particles:
+            distance = particle.get_distance()[1]
+            self.fitness -= distance - self.deviation
+
+
+
 
     def switch_lock(self):
         """Switches which group of particles is locked."""

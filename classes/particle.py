@@ -3,11 +3,13 @@ import pygame
 
 from colours import RED
 
+
 class Particle:
     """Defines a particle within an object, connected by springs."""
 
     def __init__(self, pos, fill, mass=1, lock=False, gravity=False):
-        """Initialize particle object.
+        """
+        Initialize particle object.
         
         Params
         ------
@@ -27,6 +29,8 @@ class Particle:
         gravity_strength = 0.1
 
         self.pos = np.array((float(pos[0]), float(pos[1])))
+        self.start_pos = np.array(self.pos)
+        self.positions = [self.start_pos]
 
         self.fill = fill
         self.mass = mass
@@ -75,6 +79,8 @@ class Particle:
 
             self.acceleration = self.acceleration * 0
 
+        self.positions.append(self.pos)
+
     def draw(self, screen):
         """
         Draw particle to pygame screen.
@@ -94,13 +100,22 @@ class Particle:
 
     """--- Getters and Setters ---"""
 
+    def get_distance(self):
+        """Returns absolute distance particle has moved from its starting position."""
+
+        distance = self.pos - self.start_pos
+
+        return abs(distance)
+
     def set_pos(self, pos):
         """Manually update particle's position."""
-
         self.pos = (float(pos[0]), float(pos[1]))
         self.velocity = 0
 
     def get_pos(self):
         """Returns particle position."""
-
         return self.pos
+
+    def get_start_pos(self):
+        """Returns particle starting position."""
+        return self.start_pos
