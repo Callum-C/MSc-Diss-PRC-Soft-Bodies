@@ -93,9 +93,10 @@ class Reservoir(FCSquare):
     def check_particle_deviation(self):
         """Checks how far particles have deviated in the y-axis."""
 
-        for particle in self.particles:
-            distance = particle.get_distance()[1]
-            self.fitness -= distance - self.deviation
+        for particles in self.particles:
+            for particle in particles:
+                distance = particle.get_distance()[1]
+                self.fitness -= distance - self.deviation
 
 
 
