@@ -7,3 +7,5 @@
 - Some meeting missing - notes in some book somewhere
 
 - 22 / 07 / 2022
+
+- 29 / 07 / 2022
