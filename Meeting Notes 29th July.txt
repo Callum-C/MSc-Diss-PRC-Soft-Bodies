@@ -1,0 +1,45 @@
+Project
+-------
+
+Turn to a hydrostat - Use nakajim Octopus example
+
+Include the damping coefficient in the GA so that evolution can find better damping values
+
+Python multiprocessing for sending out tournaments to other processors
+
+For now, don't penalise body moving up and down, find whatever works
+
+Measure energy / velocity of particles, penalise if particles move too fast - Chaotic
+
+Store, calculate and show fitness over time - both avgs and max
+
+Calculate euclidean distance between genos
+- Genos are effectively vectors within space, distance should be able to be calculated between them
+- If distance is large, GA is still searching for a good solution - possible for new better solution
+- If distance is small, GA has converged into one area, potential local minima, hard to recover from
+- Compare Euclidean distance to fitness over time, fitness maybe getting stuck due to converged into local minima
+
+Look into using HPC clustering for more computation time
+
+Look into pygad module for Python Genetic Algorithm implementation
+
+Project - Optimisation
+----------------------
+
+Instead of OOP and classes for springs etc, convert to linear algebra to improve run time
+
+Look into function overhead - If functions are calling functions, that are calling functions that call functions
+
+
+Intelligence in Animals and Machines
+------------------------------------
+
+Assessment 1 - Modelling Collective Behaviour
+
+Write 3K words, expand further than assignment suggests on canvas
+
+
+Adaptive Systems
+----------------
+
+Homeostat investigation
