@@ -5,7 +5,7 @@ from random import randrange
 import os
 
 from classes.reservoir import Reservoir
-from ga_functions import fitness, mutate_locus, make_file
+from ga_functions import fitness_function, mutate_locus, make_file
 
 (width, height) = (1800, 1200)
 entities = []
@@ -25,26 +25,25 @@ def main():
     start_pos = (50, 50)
 
     dt = 0.01  # Delta time, amount to increase time by per iteration of sim
-    duration = 10
+    duration = 25
 
-    pop_size = 30  # Population Size
-    num_of_gens = 5000  # Number of generations to perform
+    pop_size = 100  # Population Size
+    num_of_gens = 2000  # Number of generations to perform
     global_stats = None
 
-    max_weight = 0.5
+    max_weight = 0.1
     size = 2
     spacing = 50
 
-    method_params = {"method": "Microbial", "sim_duration": duration, "pop_size": pop_size,
-                     "gen_size": num_of_gens, "weight_search": max_weight}
+    method_params = {"method": "Microbial", "sim_duration": duration, "fitness_func": "Fitness_Day3",
+                     "pop_size": pop_size, "gen_size": num_of_gens, "weight_search": max_weight}
     file = make_file(method_params)
 
     init_pop = create_init_pop(pop_size, start_pos, max_weight, size, spacing)
     population = [init_pop]
 
     # Perform GA
-    max_fit = -1000
-    best_perf = {'gen': 0, 'max_fit': -2000, 'weights': None}
+    best_perf = {'gen': 0, 'max_fit': -100000, 'weights': None}
     for gen in range(num_of_gens):
         print("\nPerforming Generation: {}".format(gen))
 
@@ -207,7 +206,7 @@ def microbial_tournament(generation, local=5, rec=0.5, mut=0.5):
     B = generation[Bi]
     generation = np.delete(generation, Bi, 0)
 
-    if fitness(A) > fitness(B):
+    if fitness_function(A) > fitness_function(B):
         winner_weights = A.get_weights()
         loser_weights = B.get_weights()
     else:
@@ -244,7 +243,7 @@ def assess_gen_fitness(generation):
     size = len(generation)
 
     for pheno in generation:
-        fit = fitness(pheno)
+        fit = fitness_function(pheno)
 
         if fittest_pheno is not None:
             running_total += fit

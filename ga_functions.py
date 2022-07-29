@@ -6,7 +6,7 @@ import os
 # --- Genetic Algorithm Functions --- #
 
 
-def fitness(reservoir):
+def fitness_day2(reservoir):
     """
     Assess Controller's Fitness.
 
@@ -30,9 +30,10 @@ def fitness(reservoir):
 
     return distance[0] - (2.5 * abs(distance[1])) - (1000 * broken)
 
-def fitness_day3(reservoir):
+
+def fitness_function(reservoir):
     """
-    Assess Controller's Fitness.
+    Assess Controller's Fitness. - Fitness_day3
 
     For use on Day 3 Simulations
 
@@ -45,17 +46,16 @@ def fitness_day3(reservoir):
     Reservoir entity to assess fitness of
 
     TODO - Reward maintaining shape
-            - Improve Y penalty to particle level
             - Check horizontal springs are parallel
             - Back group can't "overtake" front group
-            - Bigger Penalty for breaking springs
         """
 
     distance = reservoir.get_distance()
-
     broken = reservoir.get_broken_springs()
 
-    return distance[0] - (2.5 * abs(distance[1])) - (5000 * broken)
+    dist_fit = reservoir.check_particle_deviation()
+
+    return dist_fit - (5000 * broken)
 
 
 def make_file(method_params):
@@ -74,7 +74,7 @@ def make_file(method_params):
     """
 
     directory = "training/"
-    filename = "GA-Training"
+    filename = "GA-AllDay-Training-Day3 "
     file = directory + filename + ".txt"
 
     if os.path.exists(file):

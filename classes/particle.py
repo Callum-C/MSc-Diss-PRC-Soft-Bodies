@@ -101,11 +101,15 @@ class Particle:
     """--- Getters and Setters ---"""
 
     def get_distance(self):
-        """Returns absolute distance particle has moved from its starting position."""
+        """
+        Returns distance particle has moved from its starting position.
+
+        Moving left and up will return negative values.
+        """
 
         distance = self.pos - self.start_pos
 
-        return abs(distance)
+        return distance
 
     def set_pos(self, pos):
         """Manually update particle's position."""

@@ -148,8 +148,10 @@ class Spring:
 
     def get_length(self):
         """Return spring length"""
-
-        return self.length
+        if self.broken:
+            return "BROKEN"
+        else:
+            return self.length
 
     def get_force(self):
         """Return Spring Force Vector"""

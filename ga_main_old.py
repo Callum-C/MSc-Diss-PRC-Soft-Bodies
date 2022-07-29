@@ -6,7 +6,7 @@ import copy
 
 from colours import FILL, SILVER, BACKGROUND_COLOUR, RED
 
-from ga_functions import mutate, fitness
+from ga_functions import mutate, fitness_function
 
 from classes.particle import Particle
 from classes.spring import Spring
@@ -67,8 +67,8 @@ def main():
             curr_pop.remove(B)
 
             # Assess Fitness
-            Afit = fitness(A)
-            Bfit = fitness(B)
+            Afit = fitness_function(A)
+            Bfit = fitness_function(B)
 
             # Store Fitness
             fits[i][j] = Afit
@@ -117,7 +117,7 @@ def main():
             orig = mutations['orig'][k]
             orig_fit = mutations['orig_fit'][k]
 
-            if fitness(mutant) > orig_fit:
+            if fitness_function(mutant) > orig_fit:
                 next_gen.append(Reservoir(start_point, 2, 50, mutant.get_weights()))
             else:
                 next_gen.append(Reservoir(start_point, 2, 50, orig.get_weights()))

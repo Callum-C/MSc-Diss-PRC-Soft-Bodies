@@ -13,7 +13,7 @@ from classes.test_ent import Test
 from classes.fc_square import FCSquare
 from classes.reservoir import Reservoir
 
-from ga_functions import fitness
+from ga_functions import fitness_function
 
 (width, height) = (1800, 1200)
 entities = []
@@ -29,28 +29,28 @@ def main():
     """
 
     animate = True
-    labels = False # If Statistic labels should be shown
+    labels = True # If Statistic labels should be shown
     running = True
     clock = pygame.time.Clock()
 
     t = 0
     dt = 0.01  # Delta time, amount to increase time by per iteration of sim
-    duration = 10
-
+    duration = 100
+    
     # entities.append(FCSquare((50, 50), 20, 50))
 
-    weights = np.array([[ 0.32614771, -0.28483914,  0.34747939, -0.12279233, -0.50417765,
-        -0.17541021],
-       [ 0.41368913, -0.35156443, -0.02450417, -0.15905971, -0.13313408,
-        -0.21988195],
-       [ 0.3275578 ,  0.12976873, -0.1649671 , -0.08215002, -0.04344411,
-         0.27552451],
-       [-0.19081223,  0.23174393, -0.0293657 , -0.35042643,  0.50296365,
-        -0.10969984],
-       [ 0.11254286,  0.41495674, -0.33163494, -0.12005114,  0.02197439,
-        -0.05631447],
-       [-0.00706742, -0.55829957,  0.06676179,  0.3106291 , -0.46564181,
-        -0.38705996]])
+    weights = np.array([[-0.02962719, -0.01718116, -0.06214339, -0.08996816, -0.09562773,
+        -0.1096421 ],
+       [ 0.03853923,  0.12332875,  0.05803349,  0.12483099,  0.01264102,
+         0.06608035],
+       [ 0.06467365,  0.05401188, -0.0226257 ,  0.00275969, -0.0248977 ,
+         0.05678517],
+       [ 0.10060394,  0.13258135,  0.14410669,  0.10114372,  0.05769992,
+         0.13086621],
+       [ 0.0181054 , -0.00857854, -0.1013149 ,  0.04795911, -0.11981124,
+        -0.07414809],
+       [ 0.11670784,  0.13528713,  0.00036639,  0.06699734,  0.12269892,
+         0.12165557]])
 
     entities.append(Reservoir((100, 100), 2, 50, weights, draw_parts=True))
     """
@@ -85,7 +85,7 @@ def main():
 
     if animate:
         screen = pygame.display.set_mode((width, height))
-        screen_setup(entities, screen)
+        screen_setup(entities, screen, labels)
         pygame.display.update()
         time.sleep(2)
 
@@ -120,7 +120,7 @@ def main():
     running = False
 
     print(entities[0].get_distance())
-    print(fitness(entities[0]))
+    print(fitness_function(entities[0]))
 
 def get_pos():
     """Get position of mouse cursor."""
@@ -129,7 +129,7 @@ def get_pos():
     return pos
 
 
-def screen_setup(entities, screen):
+def screen_setup(entities, screen, labels=False):
     """
     Initialise pygame screen and draw initial state.
 
@@ -149,7 +149,7 @@ def screen_setup(entities, screen):
     titlefont = pygame.font.SysFont("monospace", 20)
     myfont = pygame.font.SysFont("monospace", 15)
 
-    update_screen(entities, screen)
+    update_screen(entities, screen, labels)
 
 
 def update_screen(entities, screen, labels=False):
@@ -176,7 +176,10 @@ def update_screen(entities, screen, labels=False):
 
         # Draw Spring Lengths to Screen
         for i, length in enumerate(entities[0].get_spring_lengths()):
-            length = math.floor(length)
+            try:
+                length = math.floor(length)
+            except:
+                None
             label = myfont.render("{}".format(length), 1, SILVER)
             screen.blit(label, (1400, (150 + i * 50)))
 
