@@ -1,6 +1,5 @@
 import copy
 
-import pygame
 import numpy as np
 
 from classes.entity import Entity
@@ -8,6 +7,8 @@ from classes.fc_square import FCSquare
 from classes.particle import Particle
 from classes.spring import Spring
 from colours import SILVER
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 
 class Reservoir(FCSquare):

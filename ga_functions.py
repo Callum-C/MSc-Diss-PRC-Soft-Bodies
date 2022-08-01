@@ -31,7 +31,7 @@ def fitness_day2(reservoir):
     return distance[0] - (2.5 * abs(distance[1])) - (1000 * broken)
 
 
-def fitness_function(reservoir):
+def fitness_day3(reservoir):
     """
     Assess Controller's Fitness. - Fitness_day3
 
@@ -39,6 +39,7 @@ def fitness_function(reservoir):
 
     Changes from Day 1/2 Fitness:
         - Bigger penalty for a broken spring
+        - Distance calculated particle - instead of average entity location
 
     Params
     ------
@@ -48,7 +49,7 @@ def fitness_function(reservoir):
     TODO - Reward maintaining shape
             - Check horizontal springs are parallel
             - Back group can't "overtake" front group
-        """
+    """
 
     distance = reservoir.get_distance()
     broken = reservoir.get_broken_springs()
@@ -56,6 +57,26 @@ def fitness_function(reservoir):
     dist_fit = reservoir.check_particle_deviation()
 
     return dist_fit - (5000 * broken)
+
+
+def fitness_function(reservoir):
+    """
+    Assess Controller's Fitness. - Fitness_day4
+
+    For use on Day 34 Simulations
+
+    Changes from Day 3 Fitness:
+
+    Params
+    ------
+    reservoir: reservoir
+    Reservoir entity to assess fitness of
+    """
+
+    distance = reservoir.get_distance()[0]
+    broken = reservoir.get_broken_springs()
+
+    return distance - (5000 * broken)
 
 
 def make_file(method_params):
