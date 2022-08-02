@@ -19,7 +19,7 @@ file = None
 def main():
     global file
     pop_size = 100
-    num_of_gens = 10
+    num_of_gens = 2000
     num_of_parents = math.floor(pop_size / 2)
 
     if (num_of_parents % 2) == 1:
@@ -47,7 +47,7 @@ def main():
 
     init_pop = pygad_init_pop(pop_size, 6, max_weight)
 
-    file = make_file(method_params, pygad_params)
+    file, filename = make_file(method_params, pygad_params)
 
     ga_instance = pygad.GA(num_generations=num_of_gens,
                            num_parents_mating=num_of_parents,
@@ -66,6 +66,8 @@ def main():
     ga_instance.run()
 
     print(ga_instance.best_solution())
+
+    ga_instance.save(filename)
 
 
 def pygad_init_pop(pop_size, spring_count=6, max_weight=0.5):

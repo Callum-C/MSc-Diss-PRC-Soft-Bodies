@@ -94,19 +94,24 @@ def make_file(method_params, pygad_params=None):
     Returns
     -------
     file: string
-    file name to store data into
+    file directory to store data into
+
+    filename: string
+    The name of the file without extension
     """
 
     directory = "training/"
-    filename = "GA-Pygad-Training"
-    file = directory + filename + ".txt"
+    name = "GA-Pygad-Training"
+    filename = directory + name
+    file = filename + ".txt"
 
     if os.path.exists(file):
         flag = True
         i = 0
         while flag:
             if os.path.exists(file):
-                file = directory + filename + "-" + str(i) + ".txt"
+                filename = directory + filename + "-" + str(i)
+                file = filename + ".txt"
             else:
                 f = open(file, 'a')
                 flag = False
@@ -145,7 +150,7 @@ def make_file(method_params, pygad_params=None):
 
     f.close()
 
-    return file
+    return file, filename
 
 
 def mutate(weights, mutations=1, lr=0.01):
