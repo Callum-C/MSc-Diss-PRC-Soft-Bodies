@@ -1,13 +1,15 @@
 import copy
 
 import numpy as np
+import os
+import math
 
 from classes.entity import Entity
 from classes.fc_square import FCSquare
 from classes.particle import Particle
 from classes.spring import Spring
 from colours import SILVER
-import os
+
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 
@@ -52,6 +54,10 @@ class Reservoir(FCSquare):
         num_of_springs = len(self.springs)
 
         if weights is not None:
+            if weights.ndim == 1:
+                # If weights is 1D, Reshape to 2D
+                weight_size = int(math.sqrt(len(weights)))
+                weights = weights.reshape(weight_size, weight_size)
             self.W = weights
         else:
             self.W = np.random.uniform(-max_weight, max_weight, (num_of_springs, num_of_springs))  # Reservoir weights

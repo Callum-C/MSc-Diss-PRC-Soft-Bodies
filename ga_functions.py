@@ -73,13 +73,13 @@ def fitness_function(reservoir):
     Reservoir entity to assess fitness of
     """
 
-    distance = reservoir.get_distance()[0]
+    distance = reservoir.get_distance()
     broken = reservoir.get_broken_springs()
 
     return distance - (5000 * broken)
 
 
-def make_file(method_params):
+def make_file(method_params, pygad_params=None):
     """
     Make a unique file for storing GA Training Data.
 
@@ -88,6 +88,9 @@ def make_file(method_params):
     method_params: dict
     Dictionary of GA method parameters
 
+    pygad_params: dict
+    Dictionary of parameters for pygad instance
+
     Returns
     -------
     file: string
@@ -95,7 +98,7 @@ def make_file(method_params):
     """
 
     directory = "training/"
-    filename = "GA-AllDay-Training-Day3 "
+    filename = "GA-Pygad-Training"
     file = directory + filename + ".txt"
 
     if os.path.exists(file):
@@ -103,7 +106,7 @@ def make_file(method_params):
         i = 0
         while flag:
             if os.path.exists(file):
-                file = directory + filename + str(i) + ".txt"
+                file = directory + filename + "-" + str(i) + ".txt"
             else:
                 f = open(file, 'a')
                 flag = False
@@ -119,6 +122,22 @@ def make_file(method_params):
 
     for key, value in method_params.items():
         f.write("{}: {}, ".format(str(key), str(value)))
+
+    f.write("\n")
+
+    if pygad_params is not None:
+        f.write(
+            "\n-------------------------------------------------------------------------------------------------------")
+        f.write(
+            "\n                                --- Pygad  Parameters ---                                            \n")
+        f.write(
+            "-------------------------------------------------------------------------------------------------------\n")
+        f.write("\n")
+
+        for key, value in pygad_params.items():
+            f.write("{}: {}, ".format(str(key), str(value)))
+            if str(key) == "crossover type":
+                f.write("\n")
 
     f.write("\n\n"
             "======================================================================================================="

@@ -6,29 +6,51 @@ import random
 from random import randrange
 
 from classes.reservoir import Reservoir
+from ga_functions import make_file
+
+duration = 15
+dt = 0.01
+start_pos = (50, 50)
+size = 2
+spacing = 50
+file = None
 
 
 def main():
-    start_pos = (50, 50)
-
+    global file
     pop_size = 100
     num_of_gens = 10
+    num_of_parents = math.floor(pop_size / 2)
 
-    max_weight = 1
-    size = 2
-    spacing = 50
+    if (num_of_parents % 2) == 1:
+        num_of_parents -= 1  # Ensure num of parents is even
+
+    max_weight = 0.5
 
     # pygad init variables:
     parent_selection_type = "sss"
-    keep_parents = 1
-    crossover_type = "single_point"
+    keep_parents = 6
+    crossover_type = "uniform"
+
     mutation_type = "random"
     mutation_probability = 0.5
+    mutation_min_val = -0.01
+    mutation_max_val = 0.01
+
+    method_params = {"method": "PyGAD", "sim_duration": duration, "fitness_func": "pygad_fitness",
+                     "pop_size": pop_size, "gen_size": num_of_gens, "weight_search": max_weight}
+
+    pygad_params = {"parent_selection_type": parent_selection_type, "parents mating": num_of_parents,
+                    "keep parents": keep_parents, "crossover type": crossover_type, "mutation type": mutation_type,
+                    "mutation prob": mutation_probability, "mutation_max_val": mutation_max_val,
+                    "mutation_min_val": mutation_min_val}
 
     init_pop = pygad_init_pop(pop_size, 6, max_weight)
 
+    file = make_file(method_params, pygad_params)
+
     ga_instance = pygad.GA(num_generations=num_of_gens,
-                           num_parents_mating=pop_size,
+                           num_parents_mating=num_of_parents,
                            fitness_func=pygad_fitness,
                            initial_population=init_pop,
                            parent_selection_type=parent_selection_type,
@@ -36,6 +58,8 @@ def main():
                            crossover_type=crossover_type,
                            mutation_type=mutation_type,
                            mutation_probability=mutation_probability,
+                           random_mutation_min_val=mutation_min_val,
+                           random_mutation_max_val=mutation_max_val,
                            callback_generation=callback_gen,
                            parallel_processing=['process', 8])
 
@@ -72,18 +96,23 @@ def pygad_init_pop(pop_size, spring_count=6, max_weight=0.5):
 
 
 def callback_gen(ga_instance):
-    print("Generation : ", ga_instance.generations_completed)
-    print("Fitness of the best solution :", ga_instance.best_solution()[1])
+
+    generation = ga_instance.generations_completed
+    best_solution = ga_instance.best_solution()
+    gen_avg_fit = np.average(ga_instance.last_generation_fitness)
+
+    print("Generation : ", generation)
+    print("Fitness of the best solution :", best_solution[1])
+    print("Average fitness: {}\n".format(gen_avg_fit))
+
+    f = open(file, "a")
+    f.write("\nGeneration: {} \n - Generation Avg Fit: {} \n - Best Fitness: {}"
+            "\n - Best Solution: {} \n".format(generation, gen_avg_fit, best_solution[1], repr(best_solution[0])))
+    f.close()
 
 
 def pygad_fitness(solution, solution_idx):
     """Fitness function for GA in Pygad."""
-
-    duration = 10
-    dt = 0.01
-    start_pos = (50, 50)
-    size = 2
-    spacing = 50
 
     weights = solution.reshape(6, 6)  # Reshape weights to (spring_count, spring_count)
     res = Reservoir(start_pos, size, spacing, weights)
@@ -92,6 +121,9 @@ def pygad_fitness(solution, solution_idx):
 
     distance = res.get_distance()
     broken = res.get_broken_springs()
+
+    if broken:
+        return 0
 
     return distance - (5000 * broken)
 
