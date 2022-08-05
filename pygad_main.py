@@ -8,7 +8,7 @@ from random import randrange
 from classes.reservoir import Reservoir
 from ga_functions import make_file
 
-duration = 15
+duration = 25
 dt = 0.01
 start_pos = (50, 50)
 size = 2
@@ -18,9 +18,9 @@ file = None
 
 def main():
     global file
-    pop_size = 100
-    num_of_gens = 2000
-    num_of_parents = math.floor(pop_size / 2)
+    pop_size = 200
+    num_of_gens = 1000
+    num_of_parents = pop_size  # math.floor(pop_size / 2)
 
     if (num_of_parents % 2) == 1:
         num_of_parents -= 1  # Ensure num of parents is even
@@ -28,8 +28,8 @@ def main():
     max_weight = 0.5
 
     # pygad init variables:
-    parent_selection_type = "sss"
-    keep_parents = 6
+    parent_selection_type = "rank"
+    keep_parents = 100
     crossover_type = "uniform"
 
     mutation_type = "random"
@@ -92,7 +92,15 @@ def pygad_init_pop(pop_size, spring_count=6, max_weight=0.5):
     """
 
     init_pop = np.zeros((pop_size, spring_count ** 2))
-    for i in range(pop_size):
+    init_pop[0] = np.array([ 0.39803714,  0.00914718,  0.1500078 , -0.38611251,  0.41685062,
+        0.00391305,  0.46670877,  0.36150358, -0.43278976,  0.14746209,
+       -0.16166249,  0.11581155,  0.26025891, -0.40120317, -0.32832799,
+        0.00709017, -0.01506968, -0.16408635,  0.42180661,  0.3738667 ,
+        0.36403733,  0.43931295,  0.15180423,  0.14149314, -0.24320341,
+       -0.06265801,  0.30394548,  0.28134214, -0.20638621, -0.20013465,
+        0.4661868 , -0.4916331 , -0.08052372,  0.50322551, -0.46058362,
+        0.01557552])
+    for i in range(1, pop_size):
         init_pop[i] = np.random.uniform(-max_weight, max_weight, (spring_count, spring_count)).flatten()
     return init_pop
 

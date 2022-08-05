@@ -110,7 +110,7 @@ def make_file(method_params, pygad_params=None):
         i = 0
         while flag:
             if os.path.exists(file):
-                filename = directory + filename + "-" + str(i)
+                filename = directory + name + "-" + str(i)
                 file = filename + ".txt"
             else:
                 f = open(file, 'a')

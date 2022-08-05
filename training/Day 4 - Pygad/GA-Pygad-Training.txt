@@ -1,0 +1,54 @@
+
+-------------------------------------------------------------------------------------------------------
+                                --- Method Parameters ---                                            
+-------------------------------------------------------------------------------------------------------
+
+method: PyGAD, sim_duration: 15, fitness_func: pygad_fitness, pop_size: 100, gen_size: 10, weight_search: 0.5, 
+-------------------------------------------------------------------------------------------------------
+                                --- Pygad  Parameters ---                                            
+-------------------------------------------------------------------------------------------------------
+
+parent_selection_type: sss, parents mating: 50, keep parents: 6, crossover type: uniform, mutation type: random, mutation prob: 0.5, mutation_max_val: 0.01, mutation_min_val: -0.01, 
+
+=======================================================================================================
+
+
+Generations: 1 
+ - Generation Avg Fit: 3.3852139594439183 
+ - Best Solution: 128.83627927451343 
+
+Generations: 2 
+ - Generation Avg Fit: 3.8155047194847174 
+ - Best Solution: 128.83627927451343 
+
+Generations: 3 
+ - Generation Avg Fit: 5.669699829745549 
+ - Best Solution: 128.83627927451343 
+
+Generations: 4 
+ - Generation Avg Fit: 4.593903527939076 
+ - Best Solution: 128.83627927451343 
+
+Generations: 5 
+ - Generation Avg Fit: 4.8830796025085785 
+ - Best Solution: 128.83627927451343 
+
+Generations: 6 
+ - Generation Avg Fit: 4.732998126526014 
+ - Best Solution: 128.83627927451343 
+
+Generations: 7 
+ - Generation Avg Fit: 5.734367049179981 
+ - Best Solution: 128.83627927451343 
+
+Generations: 8 
+ - Generation Avg Fit: 5.966885569098095 
+ - Best Solution: 128.83627927451343 
+
+Generations: 9 
+ - Generation Avg Fit: 6.543839955404845 
+ - Best Solution: 128.83627927451343 
+
+Generations: 10 
+ - Generation Avg Fit: 6.41057151855893 
+ - Best Solution: 128.83627927451343 
