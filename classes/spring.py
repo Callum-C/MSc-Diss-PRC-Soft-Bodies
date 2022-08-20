@@ -90,22 +90,21 @@ class Spring:
         Display to draw Spring to.
         """
         if not self.broken:
-            pygame.draw.line(screen, self.fill, self.A.get_pos(), self.B.get_pos(), 2)
+            pygame.draw.line(screen, self.fill, self.A.get_pos(), self.B.get_pos(), 3)
 
     def get_colour_key(self):
         """Get colour gradient key for display."""
-        l = GRADIENT_KEYS
+        keys = GRADIENT_KEYS
         max_force = 0
 
         for value in self.force:
             # Remove negative sign
-            sqr = value ** 2
-            sqr_rt = math.sqrt(sqr)
+            value = abs(value)
 
-            if sqr_rt > max_force:
-                max_force = sqr_rt
+            if value > max_force:
+                max_force = value
 
-        closest = min(l, key=lambda x: abs(x - max_force))
+        closest = min(keys, key=lambda x: abs(x - max_force))
 
         return closest
 
