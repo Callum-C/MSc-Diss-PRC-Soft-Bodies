@@ -31,7 +31,7 @@ def fitness_day2(reservoir):
     return distance[0] - (2.5 * abs(distance[1])) - (1000 * broken)
 
 
-def fitness_function(reservoir):
+def fitness_day3(reservoir):
     """
     Assess Controller's Fitness. - Fitness_day3
 
@@ -39,6 +39,7 @@ def fitness_function(reservoir):
 
     Changes from Day 1/2 Fitness:
         - Bigger penalty for a broken spring
+        - Distance calculated particle - instead of average entity location
 
     Params
     ------
@@ -48,7 +49,7 @@ def fitness_function(reservoir):
     TODO - Reward maintaining shape
             - Check horizontal springs are parallel
             - Back group can't "overtake" front group
-        """
+    """
 
     distance = reservoir.get_distance()
     broken = reservoir.get_broken_springs()
@@ -58,7 +59,27 @@ def fitness_function(reservoir):
     return dist_fit - (5000 * broken)
 
 
-def make_file(method_params):
+def fitness_function(reservoir):
+    """
+    Assess Controller's Fitness. - Fitness_day4
+
+    For use on Day 34 Simulations
+
+    Changes from Day 3 Fitness:
+
+    Params
+    ------
+    reservoir: reservoir
+    Reservoir entity to assess fitness of
+    """
+
+    distance = reservoir.get_distance()
+    broken = reservoir.get_broken_springs()
+
+    return distance - (5000 * broken)
+
+
+def make_file(method_params, pygad_params=None):
     """
     Make a unique file for storing GA Training Data.
 
@@ -67,22 +88,30 @@ def make_file(method_params):
     method_params: dict
     Dictionary of GA method parameters
 
+    pygad_params: dict
+    Dictionary of parameters for pygad instance
+
     Returns
     -------
     file: string
-    file name to store data into
+    file directory to store data into
+
+    filename: string
+    The name of the file without extension
     """
 
     directory = "training/"
-    filename = "GA-AllDay-Training-Day3 "
-    file = directory + filename + ".txt"
+    name = "GA-Pygad-Training"
+    filename = directory + name
+    file = filename + ".txt"
 
     if os.path.exists(file):
         flag = True
         i = 0
         while flag:
             if os.path.exists(file):
-                file = directory + filename + str(i) + ".txt"
+                filename = directory + name + "-" + str(i)
+                file = filename + ".txt"
             else:
                 f = open(file, 'a')
                 flag = False
@@ -99,13 +128,29 @@ def make_file(method_params):
     for key, value in method_params.items():
         f.write("{}: {}, ".format(str(key), str(value)))
 
+    f.write("\n")
+
+    if pygad_params is not None:
+        f.write(
+            "\n-------------------------------------------------------------------------------------------------------")
+        f.write(
+            "\n                                --- Pygad  Parameters ---                                            \n")
+        f.write(
+            "-------------------------------------------------------------------------------------------------------\n")
+        f.write("\n")
+
+        for key, value in pygad_params.items():
+            f.write("{}: {}, ".format(str(key), str(value)))
+            if str(key) == "crossover type":
+                f.write("\n")
+
     f.write("\n\n"
             "======================================================================================================="
             "\n\n")
 
     f.close()
 
-    return file
+    return file, filename
 
 
 def mutate(weights, mutations=1, lr=0.01):

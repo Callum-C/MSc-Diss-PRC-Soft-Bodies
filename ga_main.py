@@ -113,7 +113,6 @@ def run_sim_once(generation, duration, dt):
     ------
     generation: list(Reservoir)
     The generation to perform the simulation with
-    The generation to perform the simulation with
 
     duration: int
     Duration of simulation

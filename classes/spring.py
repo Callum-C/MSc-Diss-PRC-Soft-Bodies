@@ -60,6 +60,7 @@ class Spring:
 
             if not self.broken and self.length > 5 * self.orig_rest_length:
                 self.broken = True
+                return
 
             v_hat = 0
             if self.length != 0:

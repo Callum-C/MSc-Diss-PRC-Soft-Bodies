@@ -10,7 +10,7 @@ import math
 class FCSquare(Entity):
     """Creates a Fully Connected square entity."""
 
-    def __init__(self, pos, size, spacing, draw_parts=False, fill=SILVER):
+    def __init__(self, pos, size, spacing, draw_parts=False, stretch=False, fill=SILVER):
         """
         Create a fully connected Square Entity.
         
@@ -28,6 +28,9 @@ class FCSquare(Entity):
         draw_parts: boolean
         Draw particles, false here will only draw springs.
 
+        stretch: boolean
+        Spawn in entity with displaced / extended springs.
+
         fill: hex code
         Colour to draw particles as
         """
@@ -35,13 +38,17 @@ class FCSquare(Entity):
         super(FCSquare, self).__init__(pos)
         self.draw_parts = draw_parts
 
+        stretch_scale = 1
+        if stretch:
+            stretch_scale = 2
+
         particles = []
         springs = []
         for i in range(size):
             row_particles = []
 
             for j in range(size):
-                ppos = np.array((self.pos[0] + (i * (spacing)), self.pos[1] + (j * (spacing))))
+                ppos = np.array((self.pos[0] + (i * (spacing * stretch_scale)), self.pos[1] + (j * (spacing * stretch_scale))))
                 row_particles.append(Particle(ppos, fill))
 
                 # Vertical Springs
