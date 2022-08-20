@@ -103,6 +103,15 @@ class Entity:
     def get_distance(self):
         """
         Uses starting position to calculate distance travelled.
+        """
+
+        dist = self.get_center() - self.start_pos
+        dist = np.linalg.norm(dist)
+        return dist
+
+    def get_distance_coords(self):
+        """
+        Uses starting position to calculate distance travelled.
 
         distance[0] - Movement left to right
         distance[1] - Movement up to down
