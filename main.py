@@ -29,13 +29,13 @@ def main():
     """
 
     animate = True
-    labels = True # If Statistic labels should be shown
+    labels = False # If Statistic labels should be shown
     running = True
     clock = pygame.time.Clock()
 
     t = 0
-    dt = 0.01  # Delta time, amount to increase time by per iteration of sim
-    duration = 25
+    dt = 0.05  # Delta time, amount to increase time by per iteration of sim
+    duration = 100
 
     weights = np.array([ 0.1113417 , -0.01567203, -0.33429351, -0.02081124, -0.0743839 ,
         0.02462345, -0.4359338 , -0.41623522, -0.38436757,  0.29092453,
@@ -46,7 +46,9 @@ def main():
         0.41581972, -0.46492424,  0.36992228, -0.30410626,  0.24705637,
         0.41379982])
 
-    entities.append(Reservoir((100, 100), 2, 50, weights, draw_parts=True))
+    #  entities.append(Reservoir((100, 100), 2, 50, weights, draw_parts=True))
+
+    entities.append(FCSquare((50, 50), 5, 100, stretch=True))
 
     if animate:
         screen = pygame.display.set_mode((width, height))

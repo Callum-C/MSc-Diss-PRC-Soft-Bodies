@@ -73,9 +73,10 @@ class Particle:
         """
 
         if not self.locked:
+            # Explicit Euler Method
             self.velocity += (self.acceleration * dt)
-            self.velocity = self.velocity * 0.98
-            self.pos += self.velocity
+            self.velocity = (self.velocity * 0.996)  # Damping
+            self.pos += self.velocity * dt
 
             self.acceleration = self.acceleration * 0
 
