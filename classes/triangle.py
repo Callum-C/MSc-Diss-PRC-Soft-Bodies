@@ -7,7 +7,7 @@ import numpy as np
 from numpy.linalg import norm
 
 
-class HydrostatTriangle(Entity):
+class Triangle(Entity):
     """ Creates a hydrostatic triangle. """
 
     def __init__(self, pos, spacing, triangle_num=1, A=None, B=None, C=None, AB=None, AC=None, BC=None):
@@ -27,6 +27,28 @@ class HydrostatTriangle(Entity):
 
         height: float
         Height of triangle, half the width / length / height of a square it would create.
+
+        triangle_num: int
+        Which number triangle this object is within a bigger hydrostat square.
+        Starting at the bottom and incrementing anti-clockwise.
+
+        A: Particle
+        Particle A, the central particle in the bigger hydrostart square.
+
+        B: Particle
+        Particle B, the particle down and to the left of Particle A.
+
+        C: Particle
+        Particle C, the particle down and to the right of Particle A.
+
+        AB: Spring
+        Spring that connects Particle A to Particle B
+
+        AC: Spring
+        Spring that connects Particle A to Particle C
+
+        BC: Spring
+        Spring that connects Particle B to Particle C
         """
 
         super().__init__(pos)  # self.pos is the position of Particle A
@@ -37,10 +59,8 @@ class HydrostatTriangle(Entity):
         self.springs = self.init_springs(spacing, AB, AC, BC)
 
         # Area calculation
-        # - Works at start, but gets more complicated as shape moves and changes
         self.has_area = True
-        self.area = 0.5 * (spacing * self.height)
-        self.volume = (self.area * 0.9)
+        self.area = self.calc_area()
 
     def init_particles(self, spacing, A, B, C):
         """
@@ -97,7 +117,6 @@ class HydrostatTriangle(Entity):
             # Triangle 4 only connects up existing particles
             # Currently max triangles is 4
             print("_init_particle_c not required here.")
-
 
     def init_springs(self, spacing, AB, AC, BC):
         """

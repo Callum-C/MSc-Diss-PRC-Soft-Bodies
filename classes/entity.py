@@ -98,18 +98,14 @@ class Entity:
     def get_center(self):
         """
         Get center of entity.
-
-        TODO - Allow for more particles
         """
 
-        try:
-            p1 = np.add(self.particles[0][0].get_pos(), self.particles[1][0].get_pos())
-            p2 = np.add(self.particles[0][1].get_pos(), self.particles[1][1].get_pos())
-            sum = np.add(p1, p2)
+        positions = np.zeros((len(self.particles), 2))
 
-            return sum / 4
-        except:
-            print("Exception in self.get_center()")
+        for i, particle in enumerate(self.particles):
+            positions[i] = particle.get_pos()
+
+        return positions.mean(0)
 
     def get_distance(self):
         """

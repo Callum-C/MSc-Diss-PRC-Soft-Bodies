@@ -1,7 +1,7 @@
 from classes.entity import Entity
-from classes.hydrostat_triangle import HydrostatTriangle
+from classes.triangle import Triangle
 from colours import SILVER
-
+import numpy as np
 
 class HydrostatSquare(Entity):
     """ Creates a hydrostatic square. """
@@ -21,6 +21,14 @@ class HydrostatSquare(Entity):
         spacing: int
         Space between particles when at rest.
 
+        draw_parts: boolean
+        Draw particles, false here will only draw springs.
+
+        stretch: boolean
+        Spawn in entity with displaced / extended springs.
+
+        fill: hex code
+        Colour to draw particles as
         """
 
         super().__init__(pos)
@@ -37,6 +45,10 @@ class HydrostatSquare(Entity):
         self.has_area = True
         self.area = self.calc_area()
 
+        self.volume = self.area * 25
+        self.fluid_pressure = self.volume / self.area
+
+
     def _init_triangles(self, spacing):
         """
         Initialise the 4 triangles that make this object.
@@ -44,7 +56,7 @@ class HydrostatSquare(Entity):
         """
 
         # Triangle 1
-        self.triangles.append(HydrostatTriangle(self.pos, spacing, 1))
+        self.triangles.append(Triangle(self.pos, spacing, 1))
 
         self.particles = self.triangles[0].get_all_particles()
         self.head = self.particles[0]
@@ -77,7 +89,7 @@ class HydrostatSquare(Entity):
         B = self.triangles[0].get_particle_c()
         AB = self.triangles[0].get_spring_ac()
 
-        new_triangle = HydrostatTriangle(self.pos, spacing, 2, A, B, AB=AB)
+        new_triangle = Triangle(self.pos, spacing, 2, A, B, AB=AB)
         self.triangles.append(new_triangle)
 
         new_particles = new_triangle.get_particle_c()
@@ -98,7 +110,7 @@ class HydrostatSquare(Entity):
         B = self.triangles[1].get_particle_c()
         AB = self.triangles[1].get_spring_ac()
 
-        new_triangle = HydrostatTriangle(self.pos, spacing, 3, A, B, AB=AB)
+        new_triangle = Triangle(self.pos, spacing, 3, A, B, AB=AB)
         self.triangles.append(new_triangle)
 
         new_particles = new_triangle.get_particle_c()
@@ -125,7 +137,7 @@ class HydrostatSquare(Entity):
         AB = self.triangles[2].get_spring_ac()
         AC = self.triangles[0].get_spring_ab()
 
-        new_triangle = HydrostatTriangle(self.pos, spacing, 4, A, B, C, AB, AC)
+        new_triangle = Triangle(self.pos, spacing, 4, A, B, C, AB, AC)
         self.triangles.append(new_triangle)
 
         return new_triangle.get_spring_bc()
@@ -135,13 +147,73 @@ class HydrostatSquare(Entity):
         Calculate square area.
         Return summation of triangle's areas.
         """
+
+        if self.has_a_broken_spring:
+            return 0
+
         area = 0
 
         for triangle in self.triangles:
             tri_area, _ = triangle.calc_area()
             area += tri_area
-
+        self.area = area
         return area
+
+    def calc_fluid_pressure(self):
+        """
+        Calculate internal fluid pressure.
+        """
+        self.fluid_pressure = self.volume / self.area
+        return self.fluid_pressure
+
+    def calc_fluid_force(self):
+        """
+        Calculate force of fluid from fluid pressure.
+        Applies fluid force to each external spring.
+
+        Call calc_area() first.
+        Called every iteration in update()
+        """
+
+        self.fluid_pressure = self.volume / self.area
+
+        # all external springs, don't apply force to internal springs
+        ext_springs = [self.springs[2],  # Bottom spring
+                       self.springs[4],  # Right spring
+                       self.springs[6],  # Top spring
+                       self.springs[7]]  # left spring
+
+        for spring in ext_springs:
+            self.apply_fluid_force(spring, self.fluid_pressure)
+
+    def apply_fluid_force(self, spring, pressure):
+        """
+        Apply fluid force for an individual spring.
+
+        Params
+        ------
+        spring: Spring
+        The spring to calculate force on. Should be exterior spring
+
+        pressure: float
+        Internal fluid pressure
+
+        direction: vector
+        direction to apply force in, e.g.: (-1, 1) - force would apply to the left and up
+        """
+
+        v_hat = spring.get_unit_vector()  # Unit vector of spring
+        try:
+            temp = (pressure / spring.get_length()) * v_hat  # Temp force pressure should exert
+            force = np.array((temp[1], temp[0]))  # Invert axis so that force works against spring rather than with
+
+            # Apply force
+            spring.A.apply_force(force)
+            spring.B.apply_force(force)
+
+        except:
+            spring.broken = True
+            self.has_a_broken_spring = True
 
     def move_to_cursor(self, pos):
         """
@@ -165,8 +237,12 @@ class HydrostatSquare(Entity):
 
         super().update()
 
+        self.calc_area()
+        self.calc_fluid_force()
+
         for particle in self.particles:
             particle.update_pos(dt)
+
 
     def draw(self, screen):
         """
@@ -200,3 +276,11 @@ class HydrostatSquare(Entity):
             self.head.locked = False
         else:
             self.head.locked = True
+
+    # --- Getters and Setters --- #
+
+    def get_area(self):
+        return self.area
+
+    def get_fluid_pressure(self):
+        return self.fluid_pressure
