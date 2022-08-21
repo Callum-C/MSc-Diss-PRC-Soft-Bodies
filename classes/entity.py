@@ -8,7 +8,8 @@ class Entity:
         """Create new entity."""
 
         self.head = None
-
+        self.has_area = False
+        self.has_a_broken_spring = False  # If entity has a broken spring. care: function with similar name.
         self.particles = []
         self.springs = []
 
@@ -22,7 +23,7 @@ class Entity:
         """
 
         for spring in self.springs:
-            spring.update()
+            spring.update(self)
 
     def draw(self, screen):
         """
@@ -42,9 +43,18 @@ class Entity:
         """
         NotImplemented
 
+    def calc_area(self):
+        """
+        Calculate area of entity.
+
+        Not implemented in parent, but here to prevent errors.
+        - Some subclasses use this, most don't.
+        """
+        NotImplemented
+
     def add_force(self, changes):
         """
-        Add Force to springs.
+        Manually add force to springs.
         
         Params
         ------
@@ -54,6 +64,7 @@ class Entity:
 
         for i, change in enumerate(changes):
             self.springs[i].add_force(change)
+
 
     # --- Getters and Setters --- #
 

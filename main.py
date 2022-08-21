@@ -12,6 +12,7 @@ from classes.c_elegen import CElegen
 from classes.test_ent import Test
 from classes.fc_square import FCSquare
 from classes.reservoir import Reservoir
+from classes.hydrostat_triangle import HydrostatTriangle
 
 from ga_functions import fitness_function
 
@@ -29,13 +30,13 @@ def main():
     """
 
     animate = True
-    labels = False # If Statistic labels should be shown
+    labels = True  # If Statistic labels should be shown
     running = True
     clock = pygame.time.Clock()
 
     t = 0
     dt = 0.05  # Delta time, amount to increase time by per iteration of sim
-    duration = 100
+    duration = 500
 
     weights = np.array([ 0.1113417 , -0.01567203, -0.33429351, -0.02081124, -0.0743839 ,
         0.02462345, -0.4359338 , -0.41623522, -0.38436757,  0.29092453,
@@ -48,7 +49,7 @@ def main():
 
     #  entities.append(Reservoir((100, 100), 2, 50, weights, draw_parts=True))
 
-    entities.append(FCSquare((50, 50), 5, 100, stretch=True))
+    entities.append(HydrostatTriangle((250, 250), 100))
 
     if animate:
         screen = pygame.display.set_mode((width, height))
@@ -86,8 +87,8 @@ def main():
 
     running = False
 
-    print(entities[0].get_distance())
-    print(fitness_function(entities[0]))
+    # print(entities[0].get_distance())
+    # print(fitness_function(entities[0]))
 
 
 def get_pos():
@@ -142,6 +143,14 @@ def update_screen(entities, screen, labels=False):
         title = titlefont.render("Spring Lengths and Forces", 5, SILVER)
         screen.blit(title, (1400, 100))
 
+        if entities[0].has_area:
+            area, longest_side = entities[0].calc_area()
+            label = myfont.render("Area: {}".format(area), 1, SILVER)
+            screen.blit(label, (1400, 150))
+
+            label = myfont.render("Longest Side: {}".format(longest_side), 1, SILVER)
+            screen.blit(label, (1400, 200))
+
         # Draw Spring Lengths to Screen
         for i, length in enumerate(entities[0].get_spring_lengths()):
             try:
@@ -149,12 +158,12 @@ def update_screen(entities, screen, labels=False):
             except:
                 None
             label = myfont.render("{}".format(length), 1, SILVER)
-            screen.blit(label, (1400, (150 + i * 50)))
+            screen.blit(label, (1400, (250 + i * 50)))
 
         # Draw Spring Forces to Screen
         for i, force in enumerate(entities[0].get_spring_forces()):
             label = myfont.render("{}".format(force), 1, SILVER)
-            screen.blit(label, (1500, (150 + i * 50)))
+            screen.blit(label, (1500, (250 + i * 50)))
 
     pygame.display.update()
 

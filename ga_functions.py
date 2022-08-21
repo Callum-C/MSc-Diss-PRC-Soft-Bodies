@@ -63,7 +63,7 @@ def fitness_function(reservoir):
     """
     Assess Controller's Fitness. - Fitness_day4
 
-    For use on Day 34 Simulations
+    For use on Day 4 Simulations
 
     Changes from Day 3 Fitness:
 

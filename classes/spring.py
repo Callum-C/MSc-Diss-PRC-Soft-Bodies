@@ -49,8 +49,7 @@ class Spring:
         key = self.get_colour_key()
         self.fill = B_R_GRADIENT[key]
 
-
-    def update(self):
+    def update(self, parent=None):
         """Update Spring force."""
 
         if not self.broken:
@@ -60,6 +59,7 @@ class Spring:
 
             if not self.broken and self.length > 5 * self.orig_rest_length:
                 self.broken = True
+                parent.has_a_broken_spring = True
                 return
 
             v_hat = 0
