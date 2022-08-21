@@ -4,29 +4,23 @@ import numpy as np
 import os
 import math
 
-from classes.entity import Entity
-from classes.fc_square import FCSquare
-from classes.particle import Particle
-from classes.spring import Spring
+from classes.hydrostat_square import HydrostatSquare
 from colours import SILVER
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 
-class Reservoir(FCSquare):
+class HydrostatReservoir(HydrostatSquare):
 
-    def __init__(self, pos, size, spacing, weights=None, max_weight=0.5, draw_parts=False, fill=SILVER):
+    def __init__(self, pos, spacing, weights=None, max_weight=0.5, draw_parts=False, fill=SILVER):
         """
-        Create a Reservoir Object.
-        Creates a fully connected square entity controlled by a Reservoir.
+        Create a Hydrostat Reservoir Object.
+        Creates a hydrostat square entity controlled by a Reservoir.
 
         Params
         ------
         pos: tuple
         (x, y) position of top left particle of square.
-
-        size: int
-        Size of square, 5 here will make a 5x5 square.
 
         spacing: int
         Space between particles when at rest.
@@ -44,7 +38,7 @@ class Reservoir(FCSquare):
         Colour to draw particles as
         """
 
-        super().__init__(pos, size, spacing, draw_parts, fill)
+        super().__init__(pos, spacing, draw_parts, fill)
         self.start_pos = self.get_center()  # Position of center of the entity
 
         self.t = 0  # Tracks time since last lock switch
@@ -63,11 +57,8 @@ class Reservoir(FCSquare):
             self.W = np.random.uniform(-max_weight, max_weight, (num_of_springs, num_of_springs))  # Reservoir weights
 
         # Particle Groups
-        self.left = []
-        self.right = []
-        for i in range(size):
-            self.left.append((self.particles[0][i]))
-            self.right.append(self.particles[size-1][i])
+        self.left = [self.particles[1], self.particles[4]]
+        self.right = [self.particles[2], self.particles[3]]
 
         self.locked = 'right'
         for particle in self.right:
@@ -88,7 +79,7 @@ class Reservoir(FCSquare):
         Rout = np.dot(displacements, self.W)
         self.set_new_rest_lengths(Rout)
 
-        if 0.98 <= self.t <= 1.08:
+        if 4.98 <= self.t <= 5.08:
             self.switch_lock()
             # self.check_particle_deviation()
             self.t = 0

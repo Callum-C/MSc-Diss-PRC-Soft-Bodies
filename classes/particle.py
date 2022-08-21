@@ -1,13 +1,13 @@
 import numpy as np
 import pygame
 
-from colours import RED
+from colours import RED, SILVER
 
 
 class Particle:
     """Defines a particle within an object, connected by springs."""
 
-    def __init__(self, pos, fill, mass=1, lock=False, gravity=False):
+    def __init__(self, pos, fill=SILVER, mass=1, lock=False, gravity=False):
         """
         Initialize particle object.
         

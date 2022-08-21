@@ -8,7 +8,8 @@ class Entity:
         """Create new entity."""
 
         self.head = None
-
+        self.has_area = False
+        self.has_a_broken_spring = False  # If entity has a broken spring. care: function with similar name.
         self.particles = []
         self.springs = []
 
@@ -22,7 +23,7 @@ class Entity:
         """
 
         for spring in self.springs:
-            spring.update()
+            spring.update(self)
 
     def draw(self, screen):
         """
@@ -42,9 +43,18 @@ class Entity:
         """
         NotImplemented
 
+    def calc_area(self):
+        """
+        Calculate area of entity.
+
+        Not implemented in parent, but here to prevent errors.
+        - Some subclasses use this, most don't.
+        """
+        NotImplemented
+
     def add_force(self, changes):
         """
-        Add Force to springs.
+        Manually add force to springs.
         
         Params
         ------
@@ -54,6 +64,7 @@ class Entity:
 
         for i, change in enumerate(changes):
             self.springs[i].add_force(change)
+
 
     # --- Getters and Setters --- #
 
@@ -87,18 +98,14 @@ class Entity:
     def get_center(self):
         """
         Get center of entity.
-
-        TODO - Allow for more particles
         """
 
-        try:
-            p1 = np.add(self.particles[0][0].get_pos(), self.particles[1][0].get_pos())
-            p2 = np.add(self.particles[0][1].get_pos(), self.particles[1][1].get_pos())
-            sum = np.add(p1, p2)
+        positions = np.zeros((len(self.particles), 2))
 
-            return sum / 4
-        except:
-            print("Exception in self.get_center()")
+        for i, particle in enumerate(self.particles):
+            positions[i] = particle.get_pos()
+
+        return positions.mean(0)
 
     def get_distance(self):
         """

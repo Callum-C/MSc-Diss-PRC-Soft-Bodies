@@ -35,20 +35,22 @@ class FCSquare(Entity):
         Colour to draw particles as
         """
 
-        super(FCSquare, self).__init__(pos)
+        super().__init__(pos)
         self.draw_parts = draw_parts
 
         stretch_scale = 1
         if stretch:
             stretch_scale = 2
 
+        # --- Initialise particles and springs --- #
         particles = []
         springs = []
         for i in range(size):
             row_particles = []
 
             for j in range(size):
-                ppos = np.array((self.pos[0] + (i * (spacing * stretch_scale)), self.pos[1] + (j * (spacing * stretch_scale))))
+                ppos = np.array((self.pos[0] + (i * (spacing * stretch_scale)),
+                                 self.pos[1] + (j * (spacing * stretch_scale))))
                 row_particles.append(Particle(ppos, fill))
 
                 # Vertical Springs
@@ -87,7 +89,7 @@ class FCSquare(Entity):
         Called every frame / iteration.
         """
 
-        super(FCSquare, self).update()
+        super().update()
 
         for row in self.particles:
             for particle in row:

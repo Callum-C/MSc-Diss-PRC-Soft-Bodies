@@ -34,9 +34,10 @@ class Spring:
         self.orig_rest_length = rest_length # Rest length at start
         self.k = k 
         self.length = 0
-        self.x = 0 # Spring displacement, length spring is compressed or extended from its rest length
-        self.broken = False # If spring has stretched too far and "broke"
-
+        self.spring_vector = np.array((0.0, 0.0))
+        self.v_hat = np.array((0.0, 0.0))
+        self.x = 0  # Spring displacement, length spring is compressed or extended from its rest length
+        self.broken = False  # If spring has stretched too far and "broke"
 
         self.force = np.array((0.0, 0.0))
         self.f_change = np.array((0.0, 0.0)) # Some change to force, used in self.add_force()
@@ -49,24 +50,24 @@ class Spring:
         key = self.get_colour_key()
         self.fill = B_R_GRADIENT[key]
 
-
-    def update(self):
+    def update(self, parent=None):
         """Update Spring force."""
 
         if not self.broken:
-            spring_vector = self.B.get_pos() - self.A.get_pos()
-            self.length = np.linalg.norm(spring_vector)
+            self.spring_vector = self.B.get_pos() - self.A.get_pos()
+            self.length = np.linalg.norm(self.spring_vector)
             self.x = self.length - self.rest_length
 
             if not self.broken and self.length > 5 * self.orig_rest_length:
                 self.broken = True
+                parent.has_a_broken_spring = True
                 return
 
-            v_hat = 0
+            self.v_hat = 0
             if self.length != 0:
-                v_hat = spring_vector / self.length   # Unit vector
+                self.v_hat = self.spring_vector / self.length   # Unit vector
 
-            self.force = ((self.k * self.x) * v_hat) + self.f_change
+            self.force = ((self.k * self.x) * self.v_hat) + self.f_change
             self.f_change = 0
 
             self.forces.append(self.force)
@@ -152,6 +153,12 @@ class Spring:
             return "BROKEN"
         else:
             return self.length
+
+    def get_vector(self):
+        return self.spring_vector
+
+    def get_unit_vector(self):
+        return self.v_hat
 
     def get_force(self):
         """Return Spring Force Vector"""

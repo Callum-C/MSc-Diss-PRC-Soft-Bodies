@@ -12,6 +12,9 @@ from classes.c_elegen import CElegen
 from classes.test_ent import Test
 from classes.fc_square import FCSquare
 from classes.reservoir import Reservoir
+from classes.triangle import Triangle
+from classes.hydrostat_square import HydrostatSquare
+from classes.hydrostat_reservoir import HydrostatReservoir
 
 from ga_functions import fitness_function
 
@@ -29,13 +32,13 @@ def main():
     """
 
     animate = True
-    labels = False # If Statistic labels should be shown
+    labels = False  # If Statistic labels should be shown
     running = True
     clock = pygame.time.Clock()
 
     t = 0
     dt = 0.05  # Delta time, amount to increase time by per iteration of sim
-    duration = 100
+    duration = 500
 
     weights = np.array([ 0.1113417 , -0.01567203, -0.33429351, -0.02081124, -0.0743839 ,
         0.02462345, -0.4359338 , -0.41623522, -0.38436757,  0.29092453,
@@ -48,7 +51,25 @@ def main():
 
     #  entities.append(Reservoir((100, 100), 2, 50, weights, draw_parts=True))
 
-    entities.append(FCSquare((50, 50), 5, 100, stretch=True))
+    # entities.append(HydrostatTriangle((250, 250), 100))
+    # entities.append(HydrostatSquare((250, 250), 100, True))
+    entities.append(HydrostatReservoir((100, 100), 50, draw_parts=True))
+
+    entities.append(HydrostatReservoir((100, 200), 50, draw_parts=True))
+
+    entities.append(HydrostatReservoir((200, 100), 50, draw_parts=True))
+
+    entities.append(HydrostatReservoir((200, 200), 50, draw_parts=True))
+
+    entities.append(HydrostatReservoir((200, 300), 50, draw_parts=True))
+
+    entities.append(HydrostatReservoir((100, 300), 50, draw_parts=True))
+
+    entities.append(HydrostatReservoir((300, 100), 50, draw_parts=True))
+
+    entities.append(HydrostatReservoir((300, 200), 50, draw_parts=True))
+
+    entities.append(HydrostatReservoir((300, 300), 50, draw_parts=True))
 
     if animate:
         screen = pygame.display.set_mode((width, height))
@@ -86,8 +107,8 @@ def main():
 
     running = False
 
-    print(entities[0].get_distance())
-    print(fitness_function(entities[0]))
+    # print(entities[0].get_distance())
+    # print(fitness_function(entities[0]))
 
 
 def get_pos():
@@ -142,6 +163,16 @@ def update_screen(entities, screen, labels=False):
         title = titlefont.render("Spring Lengths and Forces", 5, SILVER)
         screen.blit(title, (1400, 100))
 
+        if entities[0].has_area:
+            label = myfont.render("Area: {}".format(entities[0].get_area()), 1, SILVER)
+            screen.blit(label, (1400, 150))
+
+            label = myfont.render("Pressure: {}".format(entities[0].get_fluid_pressure()), 1, SILVER)
+            screen.blit(label, (1400, 200))
+
+            label = myfont.render("Center Position: {}".format(entities[0].get_center()), 1, SILVER)
+            screen.blit(label, (1400, 250))
+
         # Draw Spring Lengths to Screen
         for i, length in enumerate(entities[0].get_spring_lengths()):
             try:
@@ -149,12 +180,12 @@ def update_screen(entities, screen, labels=False):
             except:
                 None
             label = myfont.render("{}".format(length), 1, SILVER)
-            screen.blit(label, (1400, (150 + i * 50)))
+            screen.blit(label, (1400, (300 + i * 50)))
 
         # Draw Spring Forces to Screen
         for i, force in enumerate(entities[0].get_spring_forces()):
             label = myfont.render("{}".format(force), 1, SILVER)
-            screen.blit(label, (1500, (150 + i * 50)))
+            screen.blit(label, (1500, (300 + i * 50)))
 
     pygame.display.update()
 
