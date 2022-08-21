@@ -37,7 +37,6 @@ class Spring:
         self.x = 0 # Spring displacement, length spring is compressed or extended from its rest length
         self.broken = False # If spring has stretched too far and "broke"
 
-
         self.force = np.array((0.0, 0.0))
         self.f_change = np.array((0.0, 0.0)) # Some change to force, used in self.add_force()
         self.forces = [] 

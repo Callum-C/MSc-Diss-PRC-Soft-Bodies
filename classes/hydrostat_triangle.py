@@ -10,9 +10,9 @@ from numpy.linalg import norm
 class HydrostatTriangle(Entity):
     """ Creates a hydrostatic triangle. """
 
-    def __init__(self, pos, spacing):
+    def __init__(self, pos, spacing, triangle_num=1, A=None, B=None, C=None, AB=None, AC=None, BC=None):
         """
-        Create a hydrostatic isosceles triangle entity.
+        Create a hydrostatic triangle entity.
 
         Particle A will ultimately be the center of a FC Square.
 
@@ -29,11 +29,12 @@ class HydrostatTriangle(Entity):
         Height of triangle, half the width / length / height of a square it would create.
         """
 
-        super().__init__(pos)
+        super().__init__(pos)  # self.pos is the position of Particle A
 
+        self.triangle_num = triangle_num
         self.height = spacing/2
-        self.particles = self.init_particles(spacing)
-        self.springs = self.init_springs(spacing)
+        self.particles = self.init_particles(spacing, A, B, C)
+        self.springs = self.init_springs(spacing, AB, AC, BC)
 
         # Area calculation
         # - Works at start, but gets more complicated as shape moves and changes
@@ -41,9 +42,7 @@ class HydrostatTriangle(Entity):
         self.area = 0.5 * (spacing * self.height)
         self.volume = (self.area * 0.9)
 
-        print("area: {} volume: {}".format(self.area, self.volume))
-    
-    def init_particles(self, spacing):
+    def init_particles(self, spacing, A, B, C):
         """
         Initialise particles.
         Called during __init__.
@@ -51,33 +50,83 @@ class HydrostatTriangle(Entity):
         particles = []
 
         # Particle A
-        ppos = np.array((self.pos[0], self.pos[1]))
-        particles.append(Particle(ppos))
-        self.head = particles[0]
+        if A is None:
+            # A not given, generate new particle
+            ppos = np.array((self.pos[0], self.pos[1]))
+            particles.append(Particle(ppos))
+        else:
+            # A given, use A
+            particles.append(A)
 
+        self.head = particles[0]
         length = spacing/2
 
         # Particles B ("Down and to the left of Particle A")
-        ppos = np.array((self.pos[0] - length, self.pos[1] + length))
-        particles.append(Particle(ppos))
+        if B is None:
+            ppos = np.array((self.pos[0] - length, self.pos[1] + length))
+            particles.append(Particle(ppos))
+        else:
+            particles.append(B)
 
         # Particle C ("Down and to the right of Particle A")
-        ppos = np.array((self.pos[0] + length, self.pos[1] + length))
-        particles.append(Particle(ppos))
+        if C is None:
+            particles.append(self._init_particle_c(length))
+        else:
+            particles.append(C)
 
         return particles
 
-    def init_springs(self, spacing):
+    def _init_particle_c(self, length):
+        """
+        Initialise particle C
+        For procedural generation, this is the particle that has to be generated for Triangle 2 and 3.
+
+        Called During init_particles
+        """
+
+        if self.triangle_num == 1:
+            ppos = np.array((self.pos[0] + length, self.pos[1] + length))
+            return Particle(ppos)
+        elif self.triangle_num == 2:
+            ppos = np.array((self.pos[0] + length, self.pos[1] - length))
+            return Particle(ppos)
+        elif self.triangle_num == 3:
+            ppos = np.array((self.pos[0] - length, self.pos[1] - length))
+            return Particle(ppos)
+        else:
+            # Triangle 4 only connects up existing particles
+            # Currently max triangles is 4
+            print("_init_particle_c not required here.")
+
+
+    def init_springs(self, spacing, AB, AC, BC):
         """
         Initialise springs.
         Called during __init__.
         """
+        # Pythagoras Theorem
         spring_length = ((spacing / 2) ** 2) + ((spacing / 2) ** 2)
         spring_length = math.sqrt(spring_length)
 
-        springs = [Spring(self.particles[0], self.particles[1], spring_length, 0.01),  # A to B
-                   Spring(self.particles[0], self.particles[2], spring_length, 0.01),  # A to C
-                   Spring(self.particles[1], self.particles[2], spacing, 0.01)]        # B to C
+        springs = []
+
+        # A to B
+        if AB is None:
+            springs.append(Spring(self.particles[0], self.particles[1], spring_length, 0.01))
+        else:
+            springs.append(AB)
+
+        # A to C
+        if AC is None:
+            springs.append(Spring(self.particles[0], self.particles[2], spring_length, 0.01))
+        else:
+            springs.append(AC)
+
+        # B to C
+        if BC is None:
+            springs.append(Spring(self.particles[1], self.particles[2], spacing, 0.01))
+        else:
+            springs.append(BC)
 
         return springs
 
@@ -109,6 +158,7 @@ class HydrostatTriangle(Entity):
                 self.area = 0.5 * BC * d
                 return self.area, "BC"
         else:
+            # Entity has a broken spring, area not applicable.
             return 0, "NA"
 
     def move_to_cursor(self, pos):
@@ -167,3 +217,29 @@ class HydrostatTriangle(Entity):
             self.head.locked = False
         else:
             self.head.locked = True
+
+    # --- Getters and Setters --- #
+
+    def get_all_particles(self):
+        return self.particles
+
+    def get_particle_a(self):
+        return self.particles[0]
+
+    def get_particle_b(self):
+        return self.particles[1]
+
+    def get_particle_c(self):
+        return self.particles[2]
+
+    def get_all_springs(self):
+        return self.springs
+
+    def get_spring_ab(self):
+        return self.springs[0]
+
+    def get_spring_ac(self):
+        return self.springs[1]
+
+    def get_spring_bc(self):
+        return self.springs[2]

@@ -13,6 +13,7 @@ from classes.test_ent import Test
 from classes.fc_square import FCSquare
 from classes.reservoir import Reservoir
 from classes.hydrostat_triangle import HydrostatTriangle
+from classes.hydrostat_square import HydrostatSquare
 
 from ga_functions import fitness_function
 
@@ -49,7 +50,8 @@ def main():
 
     #  entities.append(Reservoir((100, 100), 2, 50, weights, draw_parts=True))
 
-    entities.append(HydrostatTriangle((250, 250), 100))
+    # entities.append(HydrostatTriangle((250, 250), 100))
+    entities.append(HydrostatSquare((250, 250), 100, True))
 
     if animate:
         screen = pygame.display.set_mode((width, height))
@@ -144,12 +146,9 @@ def update_screen(entities, screen, labels=False):
         screen.blit(title, (1400, 100))
 
         if entities[0].has_area:
-            area, longest_side = entities[0].calc_area()
+            area = entities[0].calc_area()
             label = myfont.render("Area: {}".format(area), 1, SILVER)
             screen.blit(label, (1400, 150))
-
-            label = myfont.render("Longest Side: {}".format(longest_side), 1, SILVER)
-            screen.blit(label, (1400, 200))
 
         # Draw Spring Lengths to Screen
         for i, length in enumerate(entities[0].get_spring_lengths()):

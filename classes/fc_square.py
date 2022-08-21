@@ -37,8 +37,6 @@ class FCSquare(Entity):
 
         super().__init__(pos)
         self.draw_parts = draw_parts
-        self.area = spacing * spacing
-        self.volume_of_gas = self.area * 0.95
 
         stretch_scale = 1
         if stretch:
