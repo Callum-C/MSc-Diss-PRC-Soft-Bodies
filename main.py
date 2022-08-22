@@ -32,7 +32,7 @@ def main():
     """
 
     animate = True
-    labels = False  # If Statistic labels should be shown
+    labels = True  # If Statistic labels should be shown
     running = True
     clock = pygame.time.Clock()
 
@@ -53,23 +53,24 @@ def main():
 
     # entities.append(HydrostatTriangle((250, 250), 100))
     # entities.append(HydrostatSquare((250, 250), 100, True))
-    entities.append(HydrostatReservoir((100, 100), 50, draw_parts=True))
+    entities.append(HydrostatReservoir((600, 600), 50, 10, draw_parts=False))
+    """
+    entities.append(HydrostatReservoir((100, 200), 50, draw_parts=False))
 
-    entities.append(HydrostatReservoir((100, 200), 50, draw_parts=True))
+    entities.append(HydrostatReservoir((200, 100), 50, draw_parts=False))
 
-    entities.append(HydrostatReservoir((200, 100), 50, draw_parts=True))
+    entities.append(HydrostatReservoir((200, 200), 50, draw_parts=False))
 
-    entities.append(HydrostatReservoir((200, 200), 50, draw_parts=True))
+    entities.append(HydrostatReservoir((200, 300), 50, draw_parts=False))
 
-    entities.append(HydrostatReservoir((200, 300), 50, draw_parts=True))
+    entities.append(HydrostatReservoir((100, 300), 50, draw_parts=False))
 
-    entities.append(HydrostatReservoir((100, 300), 50, draw_parts=True))
+    entities.append(HydrostatReservoir((300, 100), 50, draw_parts=False))
 
-    entities.append(HydrostatReservoir((300, 100), 50, draw_parts=True))
+    entities.append(HydrostatReservoir((300, 200), 50, draw_parts=False))
 
-    entities.append(HydrostatReservoir((300, 200), 50, draw_parts=True))
-
-    entities.append(HydrostatReservoir((300, 300), 50, draw_parts=True))
+    entities.append(HydrostatReservoir((300, 300), 50, draw_parts=False))
+    """
 
     if animate:
         screen = pygame.display.set_mode((width, height))

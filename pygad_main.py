@@ -6,12 +6,14 @@ import random
 from random import randrange
 
 from classes.reservoir import Reservoir
+from classes.hydrostat_reservoir import HydrostatReservoir
 from ga_functions import make_file
 
-duration = 25
-dt = 0.01
+duration = 100
+dt = 0.05
 start_pos = (50, 50)
-size = 2
+# size = 2
+volume = 10
 spacing = 50
 file = None
 
@@ -19,8 +21,8 @@ file = None
 def main():
     global file
     pop_size = 200
-    num_of_gens = 1000
-    num_of_parents = pop_size  # math.floor(pop_size / 2)
+    num_of_gens = 100
+    num_of_parents = math.floor(pop_size / 2)
 
     if (num_of_parents % 2) == 1:
         num_of_parents -= 1  # Ensure num of parents is even
@@ -37,15 +39,16 @@ def main():
     mutation_min_val = -0.01
     mutation_max_val = 0.01
 
-    method_params = {"method": "PyGAD", "sim_duration": duration, "fitness_func": "pygad_fitness",
-                     "pop_size": pop_size, "gen_size": num_of_gens, "weight_search": max_weight}
+    method_params = {"method": "PyGAD", "entity": "hydrostat_reservoir", "volume": volume, "sim_duration": duration,
+                     "fitness_func": "pygad_fitness", "pop_size": pop_size, "gen_size": num_of_gens,
+                     "weight_search": max_weight}
 
     pygad_params = {"parent_selection_type": parent_selection_type, "parents mating": num_of_parents,
                     "keep parents": keep_parents, "crossover type": crossover_type, "mutation type": mutation_type,
                     "mutation prob": mutation_probability, "mutation_max_val": mutation_max_val,
                     "mutation_min_val": mutation_min_val}
 
-    init_pop = pygad_init_pop(pop_size, 6, max_weight)
+    init_pop = pygad_init_pop(pop_size, 8, max_weight)
 
     file, filename = make_file(method_params, pygad_params)
 
@@ -70,7 +73,7 @@ def main():
     ga_instance.save(filename)
 
 
-def pygad_init_pop(pop_size, spring_count=6, max_weight=0.5):
+def pygad_init_pop(pop_size, spring_count=8, max_weight=0.5):
     """
     Create random initial population for pygad.
 
@@ -92,14 +95,7 @@ def pygad_init_pop(pop_size, spring_count=6, max_weight=0.5):
     """
 
     init_pop = np.zeros((pop_size, spring_count ** 2))
-    init_pop[0] = np.array([ 0.39803714,  0.00914718,  0.1500078 , -0.38611251,  0.41685062,
-        0.00391305,  0.46670877,  0.36150358, -0.43278976,  0.14746209,
-       -0.16166249,  0.11581155,  0.26025891, -0.40120317, -0.32832799,
-        0.00709017, -0.01506968, -0.16408635,  0.42180661,  0.3738667 ,
-        0.36403733,  0.43931295,  0.15180423,  0.14149314, -0.24320341,
-       -0.06265801,  0.30394548,  0.28134214, -0.20638621, -0.20013465,
-        0.4661868 , -0.4916331 , -0.08052372,  0.50322551, -0.46058362,
-        0.01557552])
+
     for i in range(1, pop_size):
         init_pop[i] = np.random.uniform(-max_weight, max_weight, (spring_count, spring_count)).flatten()
     return init_pop
@@ -124,8 +120,8 @@ def callback_gen(ga_instance):
 def pygad_fitness(solution, solution_idx):
     """Fitness function for GA in Pygad."""
 
-    weights = solution.reshape(6, 6)  # Reshape weights to (spring_count, spring_count)
-    res = Reservoir(start_pos, size, spacing, weights)
+    weights = solution.reshape(8, 8)  # Reshape weights to (spring_count, spring_count)
+    res = HydrostatReservoir(start_pos, spacing, volume, weights)
 
     run_sim_once(res, duration, dt)
 

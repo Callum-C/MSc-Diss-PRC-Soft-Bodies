@@ -12,7 +12,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 
 class HydrostatReservoir(HydrostatSquare):
 
-    def __init__(self, pos, spacing, weights=None, max_weight=0.5, draw_parts=False, fill=SILVER):
+    def __init__(self, pos, spacing, volume=10, weights=None, max_weight=0.5, draw_parts=False, fill=SILVER):
         """
         Create a Hydrostat Reservoir Object.
         Creates a hydrostat square entity controlled by a Reservoir.
@@ -24,6 +24,9 @@ class HydrostatReservoir(HydrostatSquare):
 
         spacing: int
         Space between particles when at rest.
+
+        volume: float
+        Volume of gas to `fill` the shape with. As a proportion to shape's area. self.volume = area * volume.
 
         weights: array(size, size)
         Weight matrix for the Reservoir, if none will be randomly initialised
@@ -38,7 +41,7 @@ class HydrostatReservoir(HydrostatSquare):
         Colour to draw particles as
         """
 
-        super().__init__(pos, spacing, draw_parts, fill)
+        super().__init__(pos, spacing, volume, draw_parts, fill)
         self.start_pos = self.get_center()  # Position of center of the entity
 
         self.t = 0  # Tracks time since last lock switch

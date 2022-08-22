@@ -3,10 +3,11 @@ from classes.triangle import Triangle
 from colours import SILVER
 import numpy as np
 
+
 class HydrostatSquare(Entity):
     """ Creates a hydrostatic square. """
 
-    def __init__(self, pos, spacing, draw_parts=False, stretch=False, fill=SILVER):
+    def __init__(self, pos, spacing, volume, draw_parts=False, stretch=False, fill=SILVER):
         """
         Create a hydrostatic square with hydrostatic triangle entities.
 
@@ -20,6 +21,9 @@ class HydrostatSquare(Entity):
 
         spacing: int
         Space between particles when at rest.
+
+        volume: float
+        Volume of gas to `fill` the shape with. As a proportion to shape's area. self.volume = area * volume.
 
         draw_parts: boolean
         Draw particles, false here will only draw springs.
@@ -45,9 +49,8 @@ class HydrostatSquare(Entity):
         self.has_area = True
         self.area = self.calc_area()
 
-        self.volume = self.area * 25
+        self.volume = self.area * volume
         self.fluid_pressure = self.volume / self.area
-
 
     def _init_triangles(self, spacing):
         """
@@ -177,7 +180,7 @@ class HydrostatSquare(Entity):
 
         self.fluid_pressure = self.volume / self.area
 
-        # all external springs, don't apply force to internal springs
+        # all external springs, force is not applied to internal springs
         ext_springs = [self.springs[2],  # Bottom spring
                        self.springs[4],  # Right spring
                        self.springs[6],  # Top spring
@@ -242,7 +245,6 @@ class HydrostatSquare(Entity):
 
         for particle in self.particles:
             particle.update_pos(dt)
-
 
     def draw(self, screen):
         """
