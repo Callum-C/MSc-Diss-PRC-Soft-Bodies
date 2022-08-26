@@ -98,12 +98,15 @@ class Entity:
     def get_center(self):
         """
         Get center of entity.
+
+        Works for square entities when self.particles is 2D
         """
 
-        positions = np.zeros((len(self.particles), 2))
+        positions = np.zeros((len(self.particles), len(self.particles[0]), 2))
 
-        for i, particle in enumerate(self.particles):
-            positions[i] = particle.get_pos()
+        for i, particles in enumerate(self.particles):
+            for j, particle in enumerate(particles):
+                positions[i][j] = particle.get_pos()
 
         return positions.mean(0)
 

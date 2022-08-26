@@ -44,7 +44,7 @@ class Reservoir(FCSquare):
         Colour to draw particles as
         """
 
-        super().__init__(pos, size, spacing, draw_parts, fill)
+        super().__init__(pos, size, spacing, draw_parts, stretch=False, fill=fill)
         self.start_pos = self.get_center()  # Position of center of the entity
 
         self.t = 0  # Tracks time since last lock switch

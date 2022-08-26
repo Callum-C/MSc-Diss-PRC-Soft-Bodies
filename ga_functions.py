@@ -127,6 +127,9 @@ def make_file(method_params, pygad_params=None):
 
     for key, value in method_params.items():
         f.write("{}: {}, ".format(str(key), str(value)))
+        if str(key) == "dt":
+            f.write("\n")
+
 
     f.write("\n")
 

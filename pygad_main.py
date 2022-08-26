@@ -16,12 +16,15 @@ start_pos = (50, 50)
 volume = 10
 spacing = 50
 file = None
+min_fit = 0
 
 
 def main():
-    global file
-    pop_size = 200
-    num_of_gens = 100
+    global file, gen_fits
+    pop_size = 20
+    num_of_gens = 10
+    gen_fits = np.array((num_of_gens, pop_size))
+
     num_of_parents = math.floor(pop_size / 2)
 
     if (num_of_parents % 2) == 1:
@@ -31,7 +34,7 @@ def main():
 
     # pygad init variables:
     parent_selection_type = "rank"
-    keep_parents = 100
+    keep_parents = 10
     crossover_type = "uniform"
 
     mutation_type = "random"
@@ -40,7 +43,7 @@ def main():
     mutation_max_val = 0.01
 
     method_params = {"method": "PyGAD", "entity": "hydrostat_reservoir", "volume": volume, "sim_duration": duration,
-                     "fitness_func": "pygad_fitness", "pop_size": pop_size, "gen_size": num_of_gens,
+                     "dt": dt, "fitness_func": "pygad_fitness", "pop_size": pop_size, "gen_size": num_of_gens,
                      "weight_search": max_weight}
 
     pygad_params = {"parent_selection_type": parent_selection_type, "parents mating": num_of_parents,
@@ -64,6 +67,7 @@ def main():
                            random_mutation_min_val=mutation_min_val,
                            random_mutation_max_val=mutation_max_val,
                            callback_generation=callback_gen,
+                           on_fitness=pygad_on_fitness,
                            parallel_processing=['process', 8])
 
     ga_instance.run()
@@ -109,29 +113,39 @@ def callback_gen(ga_instance):
 
     print("Generation : ", generation)
     print("Fitness of the best solution :", best_solution[1])
+    print("Fitness of worst solution : ", min_fit)
     print("Average fitness: {}\n".format(gen_avg_fit))
 
     f = open(file, "a")
-    f.write("\nGeneration: {} \n - Generation Avg Fit: {} \n - Best Fitness: {}"
-            "\n - Best Solution: {} \n".format(generation, gen_avg_fit, best_solution[1], repr(best_solution[0])))
+    f.write("\nGeneration: {} \n - Generation Avg Fit: {} \n - Best Fitness: {} \n - Worst Fitness: {}"
+            "\n - Best Solution: {} \n".format(generation, gen_avg_fit, best_solution[1], min_fit,
+                                               repr(best_solution[0])))
     f.close()
 
 
 def pygad_fitness(solution, solution_idx):
     """Fitness function for GA in Pygad."""
-
     weights = solution.reshape(8, 8)  # Reshape weights to (spring_count, spring_count)
     res = HydrostatReservoir(start_pos, spacing, volume, weights)
 
     run_sim_once(res, duration, dt)
 
-    distance = res.get_distance()
-    broken = res.get_broken_springs()
-
-    if broken:
+    if res.has_a_broken_spring:
         return 0
 
-    return distance - (5000 * broken)
+    return res.get_distance()
+
+
+def pygad_on_fitness(ga, fitness_vals):
+    """
+    Pygad_on_fitness() function.
+
+    Called when all fitness vals for a population are calculated.
+    """
+
+    global min_fit
+
+    min_fit = min(fitness_vals)
 
 
 def run_sim_once(res, duration, dt):

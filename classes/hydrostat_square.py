@@ -206,9 +206,9 @@ class HydrostatSquare(Entity):
         """
 
         v_hat = spring.get_unit_vector()  # Unit vector of spring
+        v_hat = np.array((-1*v_hat[1], v_hat[0]))  # Translate unit vector to work against spring
         try:
-            temp = (pressure / spring.get_length()) * v_hat  # Temp force pressure should exert
-            force = np.array((temp[1], temp[0]))  # Invert axis so that force works against spring rather than with
+            force = (pressure / spring.get_length()) * v_hat  # force pressure should exert
 
             # Apply force
             spring.A.apply_force(force)
@@ -286,3 +286,14 @@ class HydrostatSquare(Entity):
 
     def get_fluid_pressure(self):
         return self.fluid_pressure
+
+    def get_center(self):
+        """
+        Get center of entity.
+        """
+        positions = np.zeros((len(self.particles), 2))
+
+        for i, particle in enumerate(self.particles):
+            positions[i] = particle.get_pos()
+
+        return positions.mean(0)
