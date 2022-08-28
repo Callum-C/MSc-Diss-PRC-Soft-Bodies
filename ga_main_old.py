@@ -11,7 +11,6 @@ from ga_functions import mutate, fitness_function
 from classes.particle import Particle
 from classes.spring import Spring
 from classes.square import Square
-from classes.c_elegen import CElegen
 from classes.test_ent import Test
 from classes.fc_square import FCSquare
 from classes.reservoir import Reservoir

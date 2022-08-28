@@ -45,10 +45,6 @@ def fitness_day3(reservoir):
     ------
     reservoir: reservoir
     Reservoir entity to assess fitness of
-
-    TODO - Reward maintaining shape
-            - Check horizontal springs are parallel
-            - Back group can't "overtake" front group
     """
 
     distance = reservoir.get_distance()
@@ -79,7 +75,7 @@ def fitness_function(reservoir):
     return distance - (5000 * broken)
 
 
-def make_file(method_params, pygad_params=None):
+def make_file(method_params, pygad_params=None, title="GA-Pygad-Training", value=None):
     """
     Make a unique file for storing GA Training Data.
 
@@ -91,6 +87,12 @@ def make_file(method_params, pygad_params=None):
     pygad_params: dict
     Dictionary of parameters for pygad instance
 
+    title: string
+    Title of file, - "Ga Training", "Parameter Sweep" etc
+
+    value: object
+    For param sweep, current value being tested. Title should state parameter being varied.
+
     Returns
     -------
     file: string
@@ -101,8 +103,10 @@ def make_file(method_params, pygad_params=None):
     """
 
     directory = "training/"
-    name = "GA-Pygad-Training"
-    filename = directory + name
+    if value is not None:
+        title += "-" + str(value)
+    filename = directory + title
+
     file = filename + ".txt"
 
     if os.path.exists(file):
@@ -110,7 +114,7 @@ def make_file(method_params, pygad_params=None):
         i = 0
         while flag:
             if os.path.exists(file):
-                filename = directory + name + "-" + str(i)
+                filename = directory + title + "-" + str(i)
                 file = filename + ".txt"
             else:
                 f = open(file, 'a')

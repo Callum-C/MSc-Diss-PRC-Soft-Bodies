@@ -8,7 +8,6 @@ from colours import FILL, SILVER, BACKGROUND_COLOUR, RED
 from classes.particle import Particle
 from classes.spring import Spring
 from classes.square import Square
-from classes.c_elegen import CElegen
 from classes.test_ent import Test
 from classes.fc_square import FCSquare
 from classes.reservoir import Reservoir
@@ -40,23 +39,37 @@ def main():
     dt = 0.05  # Delta time, amount to increase time by per iteration of sim
     duration = 500
 
-    weights = np.array([ 0.01148868,  0.36345918, -0.37036079, -0.12249748, -0.19381718,
-       -0.10039645, -0.32867016,  0.30267763,  0.1067658 , -0.20407097,
-        0.49636033,  0.16172169,  0.10021826, -0.0529937 ,  0.21998345,
-        0.13670042,  0.38955941, -0.24837196,  0.22976312, -0.33715404,
-        0.11442199,  0.32122475,  0.25079812, -0.48430318,  0.42448847,
-        0.41699952,  0.00604483, -0.01746959,  0.05798429, -0.16880338,
-        0.30944573, -0.06820881,  0.04961575, -0.01480511, -0.29537161,
-       -0.04652879, -0.02201981,  0.11896809,  0.14194448,  0.07438135,
-       -0.27003187, -0.46667697,  0.21622401, -0.03840825,  0.48656198,
-        0.28137467,  0.35874385, -0.40486041, -0.36902631,  0.30167248,
-       -0.50438389,  0.19454068,  0.42287862,  0.14741932,  0.46223342,
-        0.38626055, -0.3045814 , -0.35176172, -0.3769118 , -0.394805  ,
-       -0.32026751, -0.05143512,  0.18437142,  0.47550242])
+    weights = np.array([-2.47027064e-01, -2.31041286e-01, -8.35632625e-04, -3.10527290e-01,
+        3.03539674e-01, -3.92647070e-01,  1.62469162e-01, -2.70795159e-02,
+       -1.63053023e-01,  7.61070736e-02,  1.10917383e-02, -1.48215552e-01,
+        1.36703866e-01,  4.00459564e-02,  1.04855317e-01, -1.06095560e-01,
+       -1.68312607e-01,  9.22871293e-02,  1.76435431e-01,  1.68265312e-01,
+        3.26200747e-03,  1.00085597e-01,  4.33514662e-01,  5.68545924e-02,
+       -4.01225031e-01, -3.64055776e-01,  5.46908291e-03,  1.82082415e-01,
+       -3.70119624e-01,  3.65413810e-02,  7.87216431e-02,  1.21222283e-01,
+        1.54661952e-01,  1.78266980e-01, -5.53578469e-02,  4.96124108e-01,
+       -5.25804533e-02, -1.88703479e-02,  3.74126127e-01,  2.74042676e-02,
+       -2.22844296e-01,  5.86348954e-02,  4.81526790e-01, -1.47459900e-01,
+       -2.66958777e-01,  2.61106839e-02,  5.09496073e-01,  4.12463675e-02,
+       -2.95111295e-01,  2.21134645e-01,  1.90525648e-03,  7.49078311e-02,
+       -2.17365571e-01, -1.32705305e-01,  4.84282159e-01, -7.69995358e-02,
+       -3.88406917e-01, -7.15802466e-02,  1.91432733e-04, -1.09843124e-01,
+       -2.28291041e-01,  1.23660946e-01,  3.78289661e-01, -3.34272218e-02])
 
-    entities.append(HydrostatSquare((250, 250), 100,  300, draw_parts=True))
-    # entities.append(HydrostatReservoir((600, 600), 50, 20, weights=weights, draw_parts=True))
+    #entities.append(HydrostatSquare((500, 500), 50,  0.01, draw_parts=True))  # 5000 Pressure breaks the springs
+    entities.append(HydrostatReservoir((600, 600), 50, 40, weights=weights, draw_parts=True))
+    """
+    Init = HydrostatSquare((500, 500), 50, 40, draw_parts=True)
+    entities.append(Init)
+    for i in range(1, 10):
+        tl = entities[i - 1].get_tr_particle()
+        bl = entities[i - 1].get_br_particle()
+        tlbl = entities[i - 1].get_right_spring()
 
+        entities.append(HydrostatSquare((500 + i * 50, 500), 50, 40, draw_parts=True,
+                                        tl=tl, bl=bl, spring_tlbl=tlbl))
+
+"""
     # entities.append(Reservoir((100, 100), 2, 50, draw_parts=True))
     """
     entities.append(HydrostatReservoir((100, 200), 50, draw_parts=False))

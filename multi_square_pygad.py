@@ -6,18 +6,18 @@ import math
 from classes.hydrostat_reservoir import HydrostatReservoir
 from ga_functions import make_file
 
-duration = 100
+duration = 500
 dt = 0.05
 start_pos = (50, 50)
 # size = 2
-volume = 0.03
+volume = 40
 spacing = 50
 file = None
 
 
 def main():
     global file
-    title = "Correct-Pressure-Training-" + str(volume)
+    title = "Multi-Square-Training-" + str(volume)
 
     pop_size = 200
     num_of_gens = 2000
