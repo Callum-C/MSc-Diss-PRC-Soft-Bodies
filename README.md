@@ -12,6 +12,10 @@ The 2 particles on the right hand side of the entity are locked for 5 seconds an
 
 Friction, while the ideal scenario, would add an entirely new dimension to the simulation and to the genetic algorithm that would need to be optimised. With limited time, a simple lock particles in place alternative was introduced.
 
+Notice at the start of the simulation the soft body is disfigured into a pattern that allows the body to "walk", but does not properly maintain it's internal volume as expected when utilising the Ideal Gas Law (IGL). 
+
+This is due to a programmatic error when initially implementing the IGL that allowed this to happen. This error was corrected later in the project, but results were not as successful.
+
 # Reservoir Computing
 
 The Fully Connected Square entity (see further down) forms the basis of an implementation of Reservoir Computing (RC).
