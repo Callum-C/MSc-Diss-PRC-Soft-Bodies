@@ -24,6 +24,14 @@ Notice at the start of the simulation the soft body is disfigured into a pattern
 
 This is due to a programmatic error when initially implementing the IGL that allowed this to happen. This error was corrected later in the project, but results were not as successful.
 
+# Where to start
+
+The **main.py** file is a visual demonstration of what the entities are evolving to do. By taking the weight matrix of the "fittest" entities and plugging it into main.py, we can see how the entities are moving.
+
+The **ga_main.py** file was my own Genetic Algorithm implementation, however, this lacked multiprocessing and thus was significantly slower than utilising the Pygad package.
+
+The **pygad_main.py** file is where the real work happens, utilising the Pygad package for a multiprocessing Genetic Algorithm, we evolve our entities toward locomotion.
+
 # Reservoir Computing
 
 The Fully Connected Square entity (see further down) forms the basis of an implementation of Reservoir Computing (RC).
