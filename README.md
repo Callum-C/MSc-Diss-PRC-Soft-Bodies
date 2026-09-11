@@ -1,3 +1,9 @@
+# Final Evolved Result
+
+After 348 generations, with an initial population of 200 genotypes, the following locomotion was produced.
+
+<img width="800" height="450" alt="EvolvedGif" src="https://github.com/user-attachments/assets/bea2c75d-a32c-474e-8f43-64609776bc59" />
+
 # Reservoir Computing
 
 The Fully Connected Square entity (see further down) forms the basis of an implementation of Reservoir Computing (RC).
