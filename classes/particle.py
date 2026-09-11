@@ -23,7 +23,7 @@ class Particle:
         Lock particle in place, unaffected by physics.
 
         gravity: boolean
-        Is particle affected by gravity? 
+        Is particle affected by gravity?
         Gravity hard coded to 0.1
         """
         gravity_strength = 0.1

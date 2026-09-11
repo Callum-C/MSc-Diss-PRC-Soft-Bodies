@@ -141,7 +141,7 @@ class Spring:
         min_force = None
         for force in self.forces:
             value = min(force)
-            if min_force == None or value < min_force:
+            if min_force is None or value < min_force:
                 min_force = value
         return min_force
 

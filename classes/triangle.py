@@ -8,13 +8,13 @@ from numpy.linalg import norm
 
 
 class Triangle(Entity):
-    """ Creates a hydrostatic triangle. """
+    """ Creates a triangle. """
 
     def __init__(self, pos, spacing, triangle_num=1, A=None, B=None, C=None, AB=None, AC=None, BC=None):
         """
-        Create a hydrostatic triangle entity.
+        Create a triangle to be used within a Hydrostatic Square entity.
 
-        Particle A will ultimately be the center of a FC Square.
+        Particle A will ultimately be the center of a Hydrostat Square.
 
         Params
         ------

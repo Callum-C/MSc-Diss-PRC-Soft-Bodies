@@ -7,17 +7,18 @@ import numpy as np
 class HydrostatSquare(Entity):
     """ Creates a hydrostatic square. """
 
-    def __init__(self, pos, spacing, volume, draw_parts=False, stretch=False, fill=SILVER):
+    def __init__(self, pos, spacing, volume, draw_parts=False, stretch=False, fill=SILVER,
+                 tl=None, bl=None, spring_tlbl=None):
         """
-        Create a hydrostatic square with hydrostatic triangle entities.
+        Create a hydrostatic square made up of triangle entities.
 
-        5 Particles, 8 Springs, 4 hydrostat triangles.
+        5 Particles, 8 Springs, 4 triangles.
 
         Params
         ------
 
         pos: tuple
-        (x, y) Position of Particle A in triangle
+        (x, y) Position of central particle.
 
         spacing: int
         Space between particles when at rest.
@@ -43,7 +44,12 @@ class HydrostatSquare(Entity):
         self.springs = []
         self.triangles = []
 
-        self._init_triangles(spacing)
+        if tl is None:
+            # Not connecting to an existing square, make initial square
+            self._init_triangles(spacing)
+        else:
+            # Connect to existing square
+            self._connect_to_square(spacing, tl, bl, spring_tlbl)
 
         # Area calculation
         self.has_area = True
@@ -51,6 +57,37 @@ class HydrostatSquare(Entity):
 
         self.volume = self.area * volume
         self.fluid_pressure = self.volume / self.area
+
+    def _connect_to_square(self, spacing, tl, bl, tlbl):
+        """
+        Initialise 4 triangles to make a Hydrostatic square that connects to an existing square.
+        Called during __init__.
+        """
+        self.triangles = [None, None, None, None]
+        # Triangle 4
+        self.triangles[3] = Triangle(self.pos, spacing, 4, B=tl, C=bl, BC=tlbl)
+
+        self.head = self.triangles[3].get_particle_a()
+
+        # Triangle 1
+        self.triangles[0] = Triangle(self.pos, spacing, 1, A=self.head, B=bl, AB=self.triangles[3].get_spring_ac())
+
+        # Triangle 2
+        self.triangles[1] = Triangle(self.pos, spacing, 2, A=self.head, B=self.triangles[0].get_particle_c(),
+                                       AB=self.triangles[0].get_spring_ab())
+
+        # Triangle 3
+        self.triangles[2] = Triangle(self.pos, spacing, 2, A=self.head, B=self.triangles[1].get_particle_c(),
+                                       C=tl, AB=self.triangles[1].get_spring_ab(), AC=self.triangles[3].get_spring_ab())
+
+        self.particles = self.triangles[0].get_all_particles()
+        self.springs = self.triangles[0].get_all_springs()
+
+        for i in range(1, 3):
+            self.particles.append(self.triangles[i].get_particle_c())
+            self.springs += [self.triangles[i].get_spring_ac(), self.triangles[i].get_spring_bc()]
+
+        self.springs.append(tlbl)
 
     def _init_triangles(self, spacing):
         """
@@ -200,15 +237,13 @@ class HydrostatSquare(Entity):
 
         pressure: float
         Internal fluid pressure
-
-        direction: vector
-        direction to apply force in, e.g.: (-1, 1) - force would apply to the left and up
         """
 
         v_hat = spring.get_unit_vector()  # Unit vector of spring
+        v_hat = np.array((-1*v_hat[1], v_hat[0]))  # Translate unit vector to work against spring
         try:
-            temp = (pressure / spring.get_length()) * v_hat  # Temp force pressure should exert
-            force = np.array((temp[1], temp[0]))  # Invert axis so that force works against spring rather than with
+            # force pressure should exert TODO: The / should be * for true Ideal Gas Law
+            force = (pressure / spring.get_length()) * v_hat  
 
             # Apply force
             spring.A.apply_force(force)
@@ -286,3 +321,26 @@ class HydrostatSquare(Entity):
 
     def get_fluid_pressure(self):
         return self.fluid_pressure
+
+    def get_center(self):
+        """
+        Get center of entity.
+        """
+        positions = np.zeros((len(self.particles), 2))
+
+        for i, particle in enumerate(self.particles):
+            positions[i] = particle.get_pos()
+
+        return positions.mean(0)
+
+    def get_br_particle(self):
+        """Return bottom right particle."""
+        return self.triangles[1].get_particle_b()
+
+    def get_tr_particle(self):
+        """Return top right particle."""
+        return self.triangles[1].get_particle_c()
+
+    def get_right_spring(self):
+        """Get right spring, or spring that connects br and tr."""
+        return self.triangles[1].get_spring_bc()

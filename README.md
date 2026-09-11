@@ -1,3 +1,37 @@
+# Welcome
+
+Welcome to my Master's Dissertation repo where Physical Reservoir Computing (PRC) is investigated in controlling compliant soft bodies. 
+Our goal is for the soft body and PRC controller to evolve towards autonomous locomotion. 
+
+We use the soft body itself as the reservoir, using the displacement of springs at time step t as the input, multiply by some weight matrix, to output the updated rest length of springs for the next time step or t + 1. 
+Updating the rest length of springs on the fly allows us to dynamically alter the force exerted by the springs. Reduce the rest lengths and the spring contracts, increaase the rest length and the spring expands.
+
+# Where to start
+
+The **main.py** file is a visual demonstration of what the entities are evolving to do. By taking the weight matrix of the "fittest" entities and plugging it into main.py, we can see how the entities are moving.
+
+The **ga_main.py** file was my own Genetic Algorithm implementation, however, this lacked multiprocessing and thus was significantly slower than utilising the Pygad package.
+
+The **pygad_main.py** file is where the real work happens, utilising the Pygad package for a multiprocessing Genetic Algorithm, we evolve our entities toward locomotion.
+
+# Final Evolved Result
+
+After 348 generations, with an initial population of 200 genotypes, the following locomotion was produced.
+
+The genetic algorithm has found a weight matrix that allows the soft body to traverse downwards with a gait that looks disturbingly like walking.
+
+<img width="800" height="450" alt="EvolvedGif" src="https://github.com/user-attachments/assets/bea2c75d-a32c-474e-8f43-64609776bc59" />
+
+To introduce some kind of friction to the simulation, an alternating pattern of locking particles in place was introduced. This is depicted by the particles (typically in white) turning red, meaning they are locked in place.
+
+The 2 particles on the right hand side of the entity are locked for 5 seconds and then the opposite particles are locked. This was a simpler alternative than introducing friction into the simulation, where different particles have different friction or resistance values.
+
+Friction, while the ideal scenario, would add an entirely new dimension to the simulation and to the genetic algorithm that would need to be optimised. With limited time, a simple lock particles in place alternative was introduced.
+
+Notice at the start of the simulation the soft body is disfigured into a pattern that allows the body to "walk", but does not properly maintain it's internal volume as expected when utilising the Ideal Gas Law (IGL). 
+
+This is due to a programmatic error when initially implementing the IGL that allowed this to happen. This error was corrected later in the project, but results were not as successful.
+
 # Reservoir Computing
 
 The Fully Connected Square entity (see further down) forms the basis of an implementation of Reservoir Computing (RC).

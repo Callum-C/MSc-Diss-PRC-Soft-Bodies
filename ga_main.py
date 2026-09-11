@@ -101,7 +101,7 @@ def create_init_pop(pop_size, start_pos, max_weight=0.5, size=2, spacing=50):
 
     init_pop = []
     for i in range(pop_size):
-        init_pop.append(Reservoir(start_pos, size, spacing, max_weight=max_weight))
+        init_pop.append(HydrostatReservoir(start_pos, size, spacing, max_weight=max_weight))
     return init_pop
 
 

@@ -8,7 +8,6 @@ from colours import FILL, SILVER, BACKGROUND_COLOUR, RED
 from classes.particle import Particle
 from classes.spring import Spring
 from classes.square import Square
-from classes.c_elegen import CElegen
 from classes.test_ent import Test
 from classes.fc_square import FCSquare
 from classes.reservoir import Reservoir
@@ -32,7 +31,7 @@ def main():
     """
 
     animate = True
-    labels = True  # If Statistic labels should be shown
+    labels = False  # If Statistic labels should be shown
     running = True
     clock = pygame.time.Clock()
 
@@ -40,20 +39,38 @@ def main():
     dt = 0.05  # Delta time, amount to increase time by per iteration of sim
     duration = 500
 
-    weights = np.array([ 0.1113417 , -0.01567203, -0.33429351, -0.02081124, -0.0743839 ,
-        0.02462345, -0.4359338 , -0.41623522, -0.38436757,  0.29092453,
-       -0.02022829, -0.23686904,  0.39088547, -0.40872139, -0.2109282 ,
-        0.06772556, -0.55308473, -0.1240209 , -0.15141219, -0.10461958,
-       -0.03416356,  0.37798783, -0.11059116, -0.34009464,  0.4033937 ,
-       -0.218228  , -0.09044993,  0.37342249,  0.43275193,  0.20557787,
-        0.41581972, -0.46492424,  0.36992228, -0.30410626,  0.24705637,
-        0.41379982])
+    weights = np.array([-2.47027064e-01, -2.31041286e-01, -8.35632625e-04, -3.10527290e-01,
+        3.03539674e-01, -3.92647070e-01,  1.62469162e-01, -2.70795159e-02,
+       -1.63053023e-01,  7.61070736e-02,  1.10917383e-02, -1.48215552e-01,
+        1.36703866e-01,  4.00459564e-02,  1.04855317e-01, -1.06095560e-01,
+       -1.68312607e-01,  9.22871293e-02,  1.76435431e-01,  1.68265312e-01,
+        3.26200747e-03,  1.00085597e-01,  4.33514662e-01,  5.68545924e-02,
+       -4.01225031e-01, -3.64055776e-01,  5.46908291e-03,  1.82082415e-01,
+       -3.70119624e-01,  3.65413810e-02,  7.87216431e-02,  1.21222283e-01,
+        1.54661952e-01,  1.78266980e-01, -5.53578469e-02,  4.96124108e-01,
+       -5.25804533e-02, -1.88703479e-02,  3.74126127e-01,  2.74042676e-02,
+       -2.22844296e-01,  5.86348954e-02,  4.81526790e-01, -1.47459900e-01,
+       -2.66958777e-01,  2.61106839e-02,  5.09496073e-01,  4.12463675e-02,
+       -2.95111295e-01,  2.21134645e-01,  1.90525648e-03,  7.49078311e-02,
+       -2.17365571e-01, -1.32705305e-01,  4.84282159e-01, -7.69995358e-02,
+       -3.88406917e-01, -7.15802466e-02,  1.91432733e-04, -1.09843124e-01,
+       -2.28291041e-01,  1.23660946e-01,  3.78289661e-01, -3.34272218e-02])
 
-    #  entities.append(Reservoir((100, 100), 2, 50, weights, draw_parts=True))
+    #entities.append(HydrostatSquare((500, 500), 50,  0.01, draw_parts=True))  # 5000 Pressure breaks the springs
+    entities.append(HydrostatReservoir((500, 50), 50, 40, weights=weights, draw_parts=True))
+    """
+    Init = HydrostatSquare((500, 500), 50, 40, draw_parts=True)
+    entities.append(Init)
+    for i in range(1, 10):
+        tl = entities[i - 1].get_tr_particle()
+        bl = entities[i - 1].get_br_particle()
+        tlbl = entities[i - 1].get_right_spring()
 
-    # entities.append(HydrostatTriangle((250, 250), 100))
-    # entities.append(HydrostatSquare((250, 250), 100, True))
-    entities.append(HydrostatReservoir((600, 600), 50, 10, draw_parts=False))
+        entities.append(HydrostatSquare((500 + i * 50, 500), 50, 40, draw_parts=True,
+                                        tl=tl, bl=bl, spring_tlbl=tlbl))
+
+"""
+    # entities.append(Reservoir((100, 100), 2, 50, draw_parts=True))
     """
     entities.append(HydrostatReservoir((100, 200), 50, draw_parts=False))
 
