@@ -242,7 +242,8 @@ class HydrostatSquare(Entity):
         v_hat = spring.get_unit_vector()  # Unit vector of spring
         v_hat = np.array((-1*v_hat[1], v_hat[0]))  # Translate unit vector to work against spring
         try:
-            force = (pressure * spring.get_length()) * v_hat  # force pressure should exert TODO - Should be *
+            # force pressure should exert TODO: The / should be * for true Ideal Gas Law
+            force = (pressure / spring.get_length()) * v_hat  
 
             # Apply force
             spring.A.apply_force(force)
