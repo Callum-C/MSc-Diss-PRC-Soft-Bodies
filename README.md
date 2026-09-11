@@ -2,7 +2,15 @@
 
 After 348 generations, with an initial population of 200 genotypes, the following locomotion was produced.
 
+The genetic algorithm has found a weight matrix that allows the soft body to traverse downwards with a gait that looks disturbingly like walking.
+
 <img width="800" height="450" alt="EvolvedGif" src="https://github.com/user-attachments/assets/bea2c75d-a32c-474e-8f43-64609776bc59" />
+
+To introduce some kind of friction to the simulation, an oscillating pattern of locking particles in place was introduced. This is depicted by the particles (typically in white) turning red, meaning they are locked in place.
+
+The 2 particles on the right hand side of the entity are locked for 5 seconds and then the opposite particles are locked. This was a simpler alternative than introducing friction into the simulation, where different particles have different friction or resistance values.
+
+Friction, while the ideal scenario, would add an entirely new dimension to the simulation and to the genetic algorithm that would need to be optimised. With limited time, a simple lock particles in place alternative was introduced.
 
 # Reservoir Computing
 
